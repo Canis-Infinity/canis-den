@@ -1,0 +1,291 @@
+{
+  "defaultLocale": "zh-TW",
+  "locales": ["zh-TW", "en"],
+  "avatar": "/avatar.jpg",
+  "email": "iistw22788@gmail.com",
+  "siteUrl": "https://canis.world",
+  "profile": {
+    "zh-TW": {
+      "name": "九宵",
+      "handle": "@九宵",
+      "title": "Canis Den",
+      "badge": "九宵基地",
+      "description": "嗷嗷，這裡有九宵的創作、社群、履歷、合作邀約與各種重要入口。想找作品、追蹤近況，或丟一顆合作飛盤，都可以從這裡開始🐶",
+      "contact": "聯絡我",
+      "language": "語言",
+      "themeToggle": "切換主題",
+      "backToTop": "回到最上方",
+      "linksLabel": "主要連結",
+      "commandOpen": "搜尋",
+      "commandTitle": "快速指令",
+      "commandDescription": "搜尋連結或快速開啟動作。",
+      "commandPlaceholder": "搜尋連結...",
+      "commandEmpty": "找不到符合的項目。",
+      "commandActions": "操作",
+      "metadataTitle": "九宵基地",
+      "metadataDescription": "九宵的官方連結入口，快速找到作品、社群、合作邀約與最新內容。"
+    },
+    "en": {
+      "name": "Canis",
+      "handle": "@Canis",
+      "title": "Canis Den",
+      "badge": "Canis Den",
+      "description": "Woof woof, this is the official link hub for Canis: work, socials, collaborations, and latest updates. Find my works, follow my socials, or throw a collaboration frisbee here 🐶",
+      "contact": "Contact me",
+      "language": "Language",
+      "themeToggle": "Toggle theme",
+      "backToTop": "Back to top",
+      "linksLabel": "Main links",
+      "commandOpen": "Search",
+      "commandTitle": "Command Palette",
+      "commandDescription": "Search links or run quick actions.",
+      "commandPlaceholder": "Search links...",
+      "commandEmpty": "No results found.",
+      "commandActions": "Actions",
+      "metadataTitle": "Canis Den",
+      "metadataDescription": "The official link hub for Kyusho: work, socials, collaborations, and latest updates."
+    }
+  },
+  "links": [
+    {
+      "title": {
+        "zh-TW": "canis_infinity",
+        "en": "canis_infinity"
+      },
+      "description": {
+        "zh-TW": "我的人帳 IG！",
+        "en": "My personal IG!"
+      },
+      "href": "https://www.instagram.com/canis_infinity",
+      "icon": "SiInstagram",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 10
+    },
+    {
+      "title": {
+        "zh-TW": "canis_puppy",
+        "en": "canis_puppy"
+      },
+      "description": {
+        "zh-TW": "我的犬帳 IG！",
+        "en": "My pup IG!"
+      },
+      "href": "https://www.instagram.com/canis_puppy",
+      "icon": "SiInstagram",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 20
+    },
+    {
+      "title": {
+        "zh-TW": "canis22788",
+        "en": "canis22788"
+      },
+      "description": {
+        "zh-TW": "我的色色 X 帳號！",
+        "en": "My NSFW X account!"
+      },
+      "href": "https://x.com/canis22788",
+      "icon": "SiX",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 30
+    },
+    {
+      "title": {
+        "zh-TW": "iistw22788",
+        "en": "iistw22788"
+      },
+      "description": {
+        "zh-TW": "我的 X 帳號！",
+        "en": "My X account!"
+      },
+      "href": "https://x.com/iistw22788",
+      "icon": "SiX",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 40
+    },
+    {
+      "title": {
+        "zh-TW": "Bump",
+        "en": "Bump"
+      },
+      "description": {
+        "zh-TW": "我的 Bump 個人頁面",
+        "en": "My Bump profile page"
+      },
+      "href": "https://bumpmaps.com/p/paIujwKRkNkBI",
+      "icon": "Globe",
+      "category": "community",
+      "enabled": true,
+      "external": true,
+      "priority": 80
+    },
+    {
+      "title": {
+        "zh-TW": "Discord",
+        "en": "Discord"
+      },
+      "description": {
+        "zh-TW": "我的 Discord 帳號！",
+        "en": "My Discord account!"
+      },
+      "href": "https://discord.gg/NRxAazWy",
+      "icon": "Globe",
+      "category": "community",
+      "enabled": true,
+      "external": true,
+      "priority": 80
+    },
+    {
+      "title": {
+        "zh-TW": "@canis_infinity",
+        "en": "@canis_infinity"
+      },
+      "description": {
+        "zh-TW": "我的 Threads 帳號！",
+        "en": "My Threads account!"
+      },
+      "href": "https://www.threads.com/@canis_infinity",
+      "icon": "SiThreads",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 90
+    },
+    {
+      "title": {
+        "zh-TW": "@canis_puppy",
+        "en": "@canis_puppy"
+      },
+      "description": {
+        "zh-TW": "我的 Threads 帳號！",
+        "en": "My Threads account!"
+      },
+      "href": "https://www.threads.com/@canis_puppy",
+      "icon": "SiThreads",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 100
+    },
+    {
+      "title": {
+        "zh-TW": "張永昌",
+        "en": "張永昌"
+      },
+      "description": {
+        "zh-TW": "我的 Facebook 帳號！",
+        "en": "My Facebook account!"
+      },
+      "href": "https://www.facebook.com/canis.infinity",
+      "icon": "SiFacebook",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 110
+    },
+    {
+      "title": {
+        "zh-TW": "Retro",
+        "en": "Retro"
+      },
+      "description": {
+        "zh-TW": "我的 Retro 帳號！",
+        "en": "My Retro account!"
+      },
+      "href": "https://retro.com/@canis22788",
+      "icon": "SiRetroarch",
+      "category": "community",
+      "enabled": true,
+      "external": true,
+      "priority": 120
+    },
+    {
+      "title": {
+        "zh-TW": "個人網站",
+        "en": "個人網站"
+      },
+      "description": {
+        "zh-TW": "官方網站",
+        "en": "Official website"
+      },
+      "href": "https://iistw.com/",
+      "icon": "Globe",
+      "category": "site",
+      "enabled": true,
+      "external": true,
+      "priority": 50
+    },
+    {
+      "title": {
+        "zh-TW": "Canis.dev",
+        "en": "Canis.dev"
+      },
+      "description": {
+        "zh-TW": "文章與紀錄",
+        "en": "Posts and notes"
+      },
+      "href": "https://blog.iistw.com/",
+      "icon": "FileText",
+      "category": "site",
+      "enabled": true,
+      "external": true,
+      "priority": 60
+    },
+    {
+      "title": {
+        "zh-TW": "履歷表",
+        "en": "履歷表"
+      },
+      "description": {
+        "zh-TW": "履歷與經歷",
+        "en": "Resume and experience"
+      },
+      "href": "https://resume.iistw.com/",
+      "icon": "BriefcaseBusiness",
+      "category": "profile",
+      "enabled": true,
+      "external": true,
+      "priority": 70
+    },
+    {
+      "title": {
+        "zh-TW": "GitHub",
+        "en": "GitHub"
+      },
+      "description": {
+        "zh-TW": "我的 GitHub 帳號！",
+        "en": "My GitHub account!"
+      },
+      "href": "https://github.com/Canis-Infinity",
+      "icon": "SiGithub",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 75
+    },
+    {
+      "title": {
+        "zh-TW": "LinkedIn",
+        "en": "LinkedIn"
+      },
+      "description": {
+        "zh-TW": "我的 LinkedIn 帳號！",
+        "en": "My LinkedIn account!"
+      },
+      "href": "https://www.linkedin.com/in/canis22788/",
+      "icon": "SiLinkedin",
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 80
+    }
+  ]
+}
