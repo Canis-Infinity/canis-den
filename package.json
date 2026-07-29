@@ -30,11 +30,18 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "eslint": "^9.39.5",
     "eslint-config-next": "16.2.12",
     "prettier": "^3.9.6",
     "shadcn": "^4.16.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "8.5.25",
+    "sharp": "0.35.3"
+  },
+  "allowScripts": {
+    "unrs-resolver@1.12.2": true
   }
 }
