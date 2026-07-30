@@ -1,11 +1,13 @@
 import type { ReactNode } from "react"
 
+import { ThemeProvider } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
+  EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
 
@@ -31,23 +33,25 @@ export function StatusPage({
   children,
 }: StatusPageProps) {
   return (
-    <main className="flex min-h-svh w-full min-w-0 items-center justify-center overflow-x-hidden bg-background px-4 py-6">
-      <Empty className="w-full min-w-0 max-w-lg bg-gradient-to-b from-muted/50 to-muted px-8 py-14 sm:py-16">
-        <EmptyHeader className="w-full min-w-0 gap-3">
-          <p
-            className="max-w-full break-words font-mono text-6xl font-semibold tracking-tighter text-foreground sm:text-7xl"
-            aria-label={`HTTP ${code}`}
-          >
-            {code}
-          </p>
-          <EmptyTitle className="text-xl sm:text-2xl">{title}</EmptyTitle>
-          <EmptyDescription className="w-full min-w-0 max-w-sm leading-6">
-            {description}
-          </EmptyDescription>
-          {children}
-        </EmptyHeader>
-        <EmptyContent className="w-auto max-w-full">
-          <div className="flex w-auto max-w-full min-w-0 flex-col justify-center gap-2 sm:flex-row">
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <main className="flex min-h-svh w-full min-w-0 items-center justify-center overflow-x-hidden bg-muted/30 px-4 py-6">
+        <Empty className="w-full min-w-0 max-w-lg border bg-card px-6 py-12 shadow-sm sm:px-10 sm:py-14">
+          <EmptyHeader className="w-full min-w-0 gap-2.5">
+            <EmptyMedia>
+              <span
+                className="font-mono text-5xl font-semibold tracking-tighter text-foreground sm:text-6xl"
+                aria-label={`HTTP ${code}`}
+              >
+                {code}
+              </span>
+            </EmptyMedia>
+            <EmptyTitle className="text-lg sm:text-xl">{title}</EmptyTitle>
+            <EmptyDescription className="w-full min-w-0 max-w-sm text-pretty">
+              {description}
+            </EmptyDescription>
+            {children}
+          </EmptyHeader>
+          <EmptyContent className="w-auto max-w-full flex-row flex-wrap justify-center">
             {actions.map((action, index) =>
               action.href ? (
                 <Button
@@ -55,7 +59,6 @@ export function StatusPage({
                   render={<a href={action.href} />}
                   nativeButton={false}
                   variant={index === 0 ? "default" : "outline"}
-                  className="min-w-28"
                 >
                   {action.label}
                 </Button>
@@ -64,16 +67,15 @@ export function StatusPage({
                   key={action.label}
                   type="button"
                   variant={index === 0 ? "default" : "outline"}
-                  className="min-w-28"
                   onClick={action.onClick}
                 >
                   {action.label}
                 </Button>
               )
             )}
-          </div>
-        </EmptyContent>
-      </Empty>
-    </main>
+          </EmptyContent>
+        </Empty>
+      </main>
+    </ThemeProvider>
   )
 }

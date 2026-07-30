@@ -1,14 +1,16 @@
 import type { Metadata, Viewport } from "next"
+import { headers } from "next/headers"
 import { notFound } from "next/navigation"
 
 import { geistMono, notoSansTC } from "@/app/fonts"
 import { Providers } from "@/components/providers"
+import { getProfileContent, profileData } from "@/data/profile"
+import { isSupportedLocale, localeFormats, locales } from "@/i18n/config"
+import { getDictionary } from "@/i18n/get-dictionary"
 import {
-  getProfileContent,
-  isSupportedLocale,
-  locales,
-  profileData,
-} from "@/data/profile"
+  getLinkDomainHref,
+  parseLinkDomainSlug,
+} from "@/lib/link-domain-route"
 
 import "../globals.css"
 
@@ -28,8 +30,10 @@ export async function generateMetadata({
   if (!isSupportedLocale(locale)) {
     notFound()
   }
-
   const content = getProfileContent(locale)
+  const requestHeaders = await headers()
+  const domain =
+    parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
   const ogImage = `/${locale}/opengraph-image`
 
   return {
@@ -45,8 +49,10 @@ export async function generateMetadata({
     creator: content.name,
     publisher: content.title,
     alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((item) => [item, `/${item}`])),
+      canonical: getLinkDomainHref(domain, locale),
+      languages: Object.fromEntries(
+        locales.map((item) => [item, getLinkDomainHref(domain, item)])
+      ),
     },
     icons: {
       icon: "/favicon.ico",
@@ -55,8 +61,8 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
-      locale: locale === "zh-TW" ? "zh_TW" : "en_US",
-      url: `/${locale}`,
+      locale: localeFormats[locale].openGraph,
+      url: getLinkDomainHref(domain, locale),
       siteName: content.title,
       title: content.metadataTitle,
       description: content.metadataDescription,
@@ -114,6 +120,7 @@ export default async function LocaleLayout({
   if (!isSupportedLocale(locale)) {
     notFound()
   }
+  const dictionary = getDictionary(locale)
 
   return (
     <html
@@ -122,7 +129,12 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Providers>{children}</Providers>
+        <Providers
+          externalLinkCopy={dictionary.externalLink}
+          cookieCopy={dictionary.cookies}
+        >
+          {children}
+        </Providers>
       </body>
     </html>
   )

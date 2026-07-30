@@ -6,11 +6,8 @@ import { join } from "node:path"
 import { ImageResponse } from "next/og"
 import { notFound } from "next/navigation"
 
-import {
-  getProfileContent,
-  isSupportedLocale,
-  profileData,
-} from "@/data/profile"
+import { getProfileContent, profileData } from "@/data/profile"
+import { isSupportedLocale } from "@/i18n/config"
 
 export const runtime = "nodejs"
 export const alt = "Canis Den"
@@ -44,115 +41,113 @@ export default async function OpenGraphImage({
   ])
 
   return new ImageResponse(
-    (
-      <div
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+        background: "#080808",
+        color: "#fafafa",
+        fontFamily: "Arial",
+      }}
+    >
+      <img
+        src={background}
+        alt=""
         style={{
+          position: "absolute",
+          inset: 0,
           width: "100%",
           height: "100%",
+          objectFit: "cover",
+          opacity: 0.62,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.62) 44%, rgba(0,0,0,0.18) 100%)",
+        }}
+      />
+      <div
+        style={{
           position: "relative",
           display: "flex",
+          width: "1040px",
           alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          background: "#080808",
-          color: "#fafafa",
-          fontFamily: "Arial",
+          gap: "42px",
         }}
       >
         <img
-          src={background}
+          src={avatar}
           alt=""
           style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
+            width: "172px",
+            height: "172px",
+            borderRadius: "999px",
+            border: "4px solid rgba(255,255,255,0.82)",
             objectFit: "cover",
-            opacity: 0.62,
           }}
         />
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.62) 44%, rgba(0,0,0,0.18) 100%)",
-          }}
-        />
-        <div
-          style={{
-            position: "relative",
             display: "flex",
-            width: "1040px",
-            alignItems: "center",
-            gap: "42px",
+            flexDirection: "column",
+            maxWidth: "720px",
           }}
         >
-          <img
-            src={avatar}
-            alt=""
-            style={{
-              width: "172px",
-              height: "172px",
-              borderRadius: "999px",
-              border: "4px solid rgba(255,255,255,0.82)",
-              objectFit: "cover",
-            }}
-          />
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              maxWidth: "720px",
+              width: "fit-content",
+              border: "1px solid rgba(255,255,255,0.26)",
+              borderRadius: "999px",
+              padding: "8px 16px",
+              fontSize: "26px",
+              lineHeight: 1,
+              background: "rgba(0,0,0,0.42)",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                width: "fit-content",
-                border: "1px solid rgba(255,255,255,0.26)",
-                borderRadius: "999px",
-                padding: "8px 16px",
-                fontSize: "26px",
-                lineHeight: 1,
-                background: "rgba(0,0,0,0.42)",
-              }}
-            >
-              {content.badge}
-            </div>
-            <div
-              style={{
-                marginTop: "28px",
-                fontSize: "76px",
-                fontWeight: 800,
-                lineHeight: 0.95,
-              }}
-            >
-              {content.handle}
-            </div>
-            <div
-              style={{
-                marginTop: "22px",
-                fontSize: "30px",
-                lineHeight: 1.36,
-                color: "rgba(255,255,255,0.82)",
-              }}
-            >
-              {content.metadataDescription}
-            </div>
-            <div
-              style={{
-                marginTop: "34px",
-                fontSize: "24px",
-                color: "rgba(255,255,255,0.72)",
-              }}
-            >
-              canis.world
-            </div>
+            {content.badge}
+          </div>
+          <div
+            style={{
+              marginTop: "28px",
+              fontSize: "76px",
+              fontWeight: 800,
+              lineHeight: 0.95,
+            }}
+          >
+            {content.handle}
+          </div>
+          <div
+            style={{
+              marginTop: "22px",
+              fontSize: "30px",
+              lineHeight: 1.36,
+              color: "rgba(255,255,255,0.82)",
+            }}
+          >
+            {content.metadataDescription}
+          </div>
+          <div
+            style={{
+              marginTop: "34px",
+              fontSize: "24px",
+              color: "rgba(255,255,255,0.72)",
+            }}
+          >
+            canis.world
           </div>
         </div>
       </div>
-    ),
+    </div>,
     size
   )
 }

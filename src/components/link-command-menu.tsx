@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react"
 import { Languages, Mail, Search, SunMoon } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useTopLoader } from "nextjs-toploader"
-import { useRouter } from "next/navigation"
 
 import { ResponsiveTooltip } from "@/components/responsive-tooltip"
+import { useExternalLinkGuard } from "@/components/external-link-guard"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -20,7 +19,9 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import { type Locale, type ResolvedProfileLink, locales } from "@/data/profile"
+import type { ResolvedProfileLink } from "@/data/profile"
+import { localeNames, locales, type Locale } from "@/i18n/config"
+import { useLocaleNavigation } from "@/hooks/use-locale-navigation"
 import { linkIconMap } from "@/lib/link-icons"
 import { getNextTheme } from "@/lib/theme-mode"
 
@@ -40,22 +41,13 @@ type LinkCommandMenuProps = {
   actionsLabel: string
 }
 
-const languageLabels: Record<Locale, string> = {
-  "zh-TW": "繁中",
-  en: "English",
-}
-
-function writeLocaleCookie(locale: Locale) {
-  document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; samesite=lax`
-}
-
-function openHref(href: string) {
+function openHref(href: string, requestExternalLink: (href: string) => void) {
   if (href.startsWith("mailto:")) {
     window.location.href = href
     return
   }
 
-  window.open(href, "_blank", "noreferrer")
+  requestExternalLink(href)
 }
 
 export function LinkCommandMenu({
@@ -73,21 +65,11 @@ export function LinkCommandMenu({
   emptyLabel,
   actionsLabel,
 }: LinkCommandMenuProps) {
-  const router = useRouter()
-  const topLoader = useTopLoader()
+  const { requestExternalLink } = useExternalLinkGuard()
+  const changeLocale = useLocaleNavigation(locale)
   const { setTheme, theme } = useTheme()
   const [enabled, setEnabled] = useState(false)
   const [open, setOpen] = useState(false)
-
-  const changeLocale = (nextLocale: Locale) => {
-    if (nextLocale === locale) {
-      return
-    }
-
-    writeLocaleCookie(nextLocale)
-    topLoader.start()
-    router.push(`/${nextLocale}`)
-  }
 
   useEffect(() => {
     const media = window.matchMedia(
@@ -112,7 +94,10 @@ export function LinkCommandMenu({
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
+      if (
+        event.key.toLowerCase() !== "k" ||
+        (!event.metaKey && !event.ctrlKey)
+      ) {
         return
       }
 
@@ -190,63 +175,65 @@ export function LinkCommandMenu({
               data-lpignore="true"
             />
             <CommandList>
-            <CommandEmpty>{emptyLabel}</CommandEmpty>
-            <CommandGroup heading={linksLabel}>
-              {links.map((link) => {
-                const Icon = linkIconMap[link.icon]
+              <CommandEmpty>{emptyLabel}</CommandEmpty>
+              <CommandGroup heading={linksLabel}>
+                {links.map((link) => {
+                  const Icon = linkIconMap[link.icon]
 
-                return (
-                  <CommandItem
-                    key={`${link.title}-${link.href}`}
-                    value={`${link.title} ${link.description ?? ""}`}
-                    onSelect={() => {
-                      setOpen(false)
-                      openHref(link.href)
-                    }}
-                  >
-                    <Icon className="size-4" />
-                    <span>{link.title}</span>
-                  </CommandItem>
-                )
-              })}
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading={actionsLabel}>
-              <CommandItem
-                value={themeLabel}
-                onSelect={() => {
-                  setOpen(false)
-                  setTheme(getNextTheme(theme))
-                }}
-              >
-                <SunMoon className="size-4" />
-                <span>{themeLabel}</span>
-              </CommandItem>
-              {locales.map((value) => (
+                  return (
+                    <CommandItem
+                      key={`${link.title}-${link.href}`}
+                      value={`${link.title} ${link.description ?? ""}`}
+                      onSelect={() => {
+                        setOpen(false)
+                        openHref(link.href, requestExternalLink)
+                      }}
+                    >
+                      <Icon className="size-4" />
+                      <span>{link.title}</span>
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup heading={actionsLabel}>
                 <CommandItem
-                  key={value}
-                  value={`${languageLabel} ${languageLabels[value]}`}
+                  value={themeLabel}
                   onSelect={() => {
                     setOpen(false)
-                    changeLocale(value)
+                    setTheme(getNextTheme(theme))
                   }}
                 >
-                  <Languages className="size-4" />
-                  <span>{languageLabels[value]}</span>
-                  {value === locale ? <CommandShortcut>✓</CommandShortcut> : null}
+                  <SunMoon className="size-4" />
+                  <span>{themeLabel}</span>
                 </CommandItem>
-              ))}
-              <CommandItem
-                value={contactLabel}
-                onSelect={() => {
-                  setOpen(false)
-                  openHref(contactHref)
-                }}
-              >
-                <Mail className="size-4" />
-                <span>{contactLabel}</span>
-              </CommandItem>
-            </CommandGroup>
+                {locales.map((value) => (
+                  <CommandItem
+                    key={value}
+                    value={`${languageLabel} ${localeNames[value]}`}
+                    onSelect={() => {
+                      setOpen(false)
+                      changeLocale(value)
+                    }}
+                  >
+                    <Languages className="size-4" />
+                    <span>{localeNames[value]}</span>
+                    {value === locale ? (
+                      <CommandShortcut>✓</CommandShortcut>
+                    ) : null}
+                  </CommandItem>
+                ))}
+                <CommandItem
+                  value={contactLabel}
+                  onSelect={() => {
+                    setOpen(false)
+                    openHref(contactHref, requestExternalLink)
+                  }}
+                >
+                  <Mail className="size-4" />
+                  <span>{contactLabel}</span>
+                </CommandItem>
+              </CommandGroup>
             </CommandList>
           </Command>
         </form>

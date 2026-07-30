@@ -1,62 +1,40 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
-import { ShieldAlert } from "lucide-react"
+import type { ReactNode } from "react"
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { AgeGateDialogs } from "@/components/age-gate-dialogs"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { linkDomains, type LinkDomain } from "@/data/profile"
+import { useLinkDomainNavigation } from "@/hooks/use-link-domain-navigation"
+import type { Locale } from "@/i18n/config"
+import type { Dictionary } from "@/i18n/types"
 
 type LinkDomainTabsProps = {
   content: Record<LinkDomain, ReactNode>
   labels: Record<LinkDomain, string>
-  agePrompt: {
-    title: string
-    description: string
-    cancel: string
-    confirm: string
-  }
+  descriptions: Record<LinkDomain, string>
+  locale: Locale
+  agePrompt: Dictionary["agePrompt"]
+  ageDenied: Dictionary["ageDenied"]
 }
 
 export function LinkDomainTabs({
   content,
   labels,
+  descriptions,
+  locale,
   agePrompt,
+  ageDenied,
 }: LinkDomainTabsProps) {
-  const [activeDomain, setActiveDomain] = useState<LinkDomain>("general")
-  const [pendingAgeCheck, setPendingAgeCheck] = useState(false)
-
-  function handleDomainChange(value: string) {
-    const domain = value as LinkDomain
-
-    if (domain === "unknown") {
-      setPendingAgeCheck(true)
-      return
-    }
-
-    setActiveDomain(domain)
-  }
-
-  function confirmAge() {
-    setPendingAgeCheck(false)
-    setActiveDomain("unknown")
-  }
+  const navigation = useLinkDomainNavigation(locale)
 
   return (
     <>
       <Tabs
-        value={activeDomain}
-        onValueChange={handleDomainChange}
+        value={navigation.activeDomain}
+        onValueChange={(value) =>
+          navigation.requestDomain(value as LinkDomain)
+        }
         className="w-full min-w-0 gap-4"
       >
         <div className="sticky top-2 z-10 rounded-xl border bg-card/95 px-3 pb-2 pt-1.5 shadow-sm backdrop-blur-md">
@@ -68,6 +46,10 @@ export function LinkDomainTabs({
             ))}
           </TabsList>
         </div>
+
+        <p className="px-2 text-center text-pretty text-sm leading-6 text-muted-foreground">
+          {descriptions[navigation.activeDomain]}
+        </p>
 
         {linkDomains.map((domain) => (
           <TabsContent
@@ -81,25 +63,16 @@ export function LinkDomainTabs({
         ))}
       </Tabs>
 
-      <AlertDialog open={pendingAgeCheck} onOpenChange={setPendingAgeCheck}>
-        <AlertDialogContent size="sm">
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <ShieldAlert />
-            </AlertDialogMedia>
-            <AlertDialogTitle>{agePrompt.title}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {agePrompt.description}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{agePrompt.cancel}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmAge}>
-              {agePrompt.confirm}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AgeGateDialogs
+        promptOpen={navigation.agePromptOpen}
+        deniedOpen={navigation.ageDeniedOpen}
+        prompt={agePrompt}
+        denied={ageDenied}
+        onConfirm={navigation.confirmAge}
+        onDeny={navigation.denyAge}
+        onChooseGeneral={() => navigation.chooseSafeDomain("general")}
+        onChooseWork={() => navigation.chooseSafeDomain("work")}
+      />
     </>
   )
 }

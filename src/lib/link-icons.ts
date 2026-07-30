@@ -32,7 +32,7 @@ import {
 } from "react-icons/si"
 import type { IconType } from "react-icons"
 
-import type { IconName } from "@/data/profile"
+import type { IconName, ResolvedProfileLink } from "@/data/profile"
 
 export const linkIconMap: Record<IconName, IconType> = {
   BriefcaseBusiness,
@@ -63,4 +63,34 @@ export const linkIconMap: Record<IconName, IconType> = {
   SiWhatsapp,
   SiX,
   SiYoutube,
+}
+
+const platformByIcon: Partial<Record<IconName, string>> = {
+  SiDiscord: "Discord",
+  SiFacebook: "Facebook",
+  SiGithub: "GitHub",
+  SiInstagram: "Instagram",
+  SiLine: "LINE",
+  SiLinkedin: "LinkedIn",
+  SiMastodon: "Mastodon",
+  SiMedium: "Medium",
+  SiPatreon: "Patreon",
+  SiPaypal: "PayPal",
+  SiPixiv: "Pixiv",
+  SiQq: "QQ",
+  SiRetroarch: "Retro",
+  SiTelegram: "Telegram",
+  SiThreads: "Threads",
+  SiTiktok: "TikTok",
+  SiWechat: "WeChat",
+  SiWeibo: "Weibo",
+  SiWhatsapp: "WhatsApp",
+  SiX: "X",
+  SiYoutube: "YouTube",
+}
+
+export function getLinkPlatform(
+  link: Pick<ResolvedProfileLink, "icon" | "title">
+) {
+  return platformByIcon[link.icon] ?? link.title
 }

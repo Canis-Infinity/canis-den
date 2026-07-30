@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 import { geistMono, notoSansTC } from "@/app/fonts"
 import { StatusPage } from "@/components/status-page"
-import { profileData } from "@/data/profile"
+import { defaultLocale } from "@/i18n/config"
 import { getStatusCopy } from "@/lib/status-copy"
 
 import "./globals.css"
@@ -16,7 +16,7 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const copy = getStatusCopy(profileData.defaultLocale)
+  const copy = getStatusCopy(defaultLocale)
 
   useEffect(() => {
     console.error(error)
@@ -24,7 +24,7 @@ export default function GlobalError({
 
   return (
     <html
-      lang={profileData.defaultLocale}
+      lang={defaultLocale}
       className={`${notoSansTC.variable} ${geistMono.variable}`}
     >
       <body>
@@ -34,7 +34,7 @@ export default function GlobalError({
           description={copy.errorDescription}
           actions={[
             { label: copy.retry, onClick: reset },
-            { label: copy.home, href: `/${profileData.defaultLocale}` },
+            { label: copy.home, href: `/${defaultLocale}` },
           ]}
         >
           {error.digest ? (

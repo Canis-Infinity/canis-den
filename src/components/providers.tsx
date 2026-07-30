@@ -2,12 +2,23 @@
 
 import NextTopLoader from "nextjs-toploader"
 
+import { CookieNotice } from "@/components/cookie-notice"
+import { ExternalLinkGuard } from "@/components/external-link-guard"
 import { PageLoadingState } from "@/components/page-loading-state"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toast"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import type { Dictionary } from "@/i18n/types"
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  externalLinkCopy,
+  cookieCopy,
+}: {
+  children: React.ReactNode
+  externalLinkCopy: Dictionary["externalLink"]
+  cookieCopy: Dictionary["cookies"]
+}) {
   return (
     <ThemeProvider
       attribute="class"
@@ -23,7 +34,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         showSpinner={false}
       />
       <PageLoadingState />
-      <TooltipProvider delay={150}>{children}</TooltipProvider>
+      <ExternalLinkGuard copy={externalLinkCopy}>
+        <TooltipProvider delay={150}>{children}</TooltipProvider>
+      </ExternalLinkGuard>
+      <CookieNotice copy={cookieCopy} />
       <Toaster />
     </ThemeProvider>
   )

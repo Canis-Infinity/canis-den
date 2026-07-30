@@ -1,23 +1,64 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-import { isSupportedLocale, locales, profileData } from "@/data/profile"
+import { defaultLocale, isSupportedLocale, locales } from "@/i18n/config"
+import {
+  getLinkDomainSlug,
+  parseLinkDomainPath,
+  parseLinkDomainSlug,
+} from "@/lib/link-domain-route"
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
+  const url = request.nextUrl.clone()
+  const { pathname } = url
+  const localeFromQuery = url.searchParams.get("lang")
+  const localeFromCookie = request.cookies.get("NEXT_LOCALE")?.value
+  const locale = isSupportedLocale(localeFromQuery)
+    ? localeFromQuery
+    : localeFromCookie && isSupportedLocale(localeFromCookie)
+      ? localeFromCookie
+      : defaultLocale
+  const legacyLocale = locales.find(
+    (item) => pathname === `/${item}` || pathname.startsWith(`/${item}/`)
   )
 
-  if (pathnameHasLocale) {
-    return
+  if (legacyLocale) {
+    const legacyDomain =
+      parseLinkDomainSlug(url.searchParams.get("tab")) ?? "general"
+    url.pathname = `/${getLinkDomainSlug(legacyDomain)}`
+    url.searchParams.delete("tab")
+    url.searchParams.set("lang", legacyLocale)
+    return NextResponse.redirect(url)
   }
 
-  const locale = request.cookies.get("NEXT_LOCALE")?.value
-  const safeLocale = locale && isSupportedLocale(locale) ? locale : profileData.defaultLocale
+  if (pathname === "/") {
+    url.pathname = `/${getLinkDomainSlug("general")}`
+    url.searchParams.set("lang", locale)
+    return NextResponse.redirect(url)
+  }
 
-  request.nextUrl.pathname = `/${safeLocale}${pathname}`
+  const domain = parseLinkDomainPath(pathname)
 
-  return NextResponse.redirect(request.nextUrl)
+  if (domain && pathname === `/${getLinkDomainSlug(domain)}`) {
+    if (localeFromQuery !== locale) {
+      url.searchParams.set("lang", locale)
+      return NextResponse.redirect(url)
+    }
+
+    url.pathname = `/${locale}`
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set("x-link-domain", getLinkDomainSlug(domain))
+    return NextResponse.rewrite(url, {
+      request: { headers: requestHeaders },
+    })
+  }
+
+  if (localeFromQuery !== locale) {
+    url.searchParams.set("lang", locale)
+    return NextResponse.redirect(url)
+  }
+
+  url.pathname = `/${locale}${pathname}`
+  return NextResponse.rewrite(url)
 }
 
 export const config = {

@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Canis Den
 
-## Getting Started
-
-First, run the development server:
+## 本機開發
 
 ```bash
+npm install
+Copy-Item .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+網站預設開啟於 [http://localhost:7342](http://localhost:7342)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 環境變數
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`.env.local` 僅供本機開發使用，不應提交至版本控制。正式環境請在部署平台或執行服務的環境變數設定中提供：
 
-## Learn More
+- `RESEND_API_KEY`：Resend API 金鑰。未設定時，聯絡表單 API 會回傳 `503`。
+- `CONTACT_FROM_EMAIL`：已在 Resend 驗證的寄件者。
+- `CONTACT_TO_EMAIL`：聯絡表單收件者。
+- `NEXT_PUBLIC_SITE_URL`：正式網站公開網址，用於 canonical、Sitemap 與結構化資料。
 
-To learn more about Next.js, take a look at the following resources:
+Vercel 可在專案的 Settings、Environment Variables 中分別設定 Production、Preview 與 Development。自行部署時，請透過容器、程序管理器或主機服務注入；不需要在伺服器建立 `.env.local`。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+變數範例請參考 [.env.example](./.env.example)，不要把正式金鑰寫入該檔案。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 驗證
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
