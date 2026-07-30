@@ -1,3 +1,7 @@
+import { createHash } from "node:crypto"
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
+
 import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import { notFound } from "next/navigation"
@@ -15,6 +19,12 @@ import {
 import "../globals.css"
 
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? profileData.siteUrl)
+
+async function getOgImageVersion() {
+  const image = await readFile(join(process.cwd(), "public", "og.jpg"))
+
+  return createHash("sha256").update(image).digest("hex").slice(0, 12)
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -34,17 +44,24 @@ export async function generateMetadata({
   const requestHeaders = await headers()
   const domain =
     parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
-  const ogImage = `/${locale}/opengraph-image`
+  const ogImageVersion = await getOgImageVersion()
+  const ogImage = `/${locale}/opengraph-image?v=${ogImageVersion}`
 
   return {
     metadataBase: siteUrl,
     applicationName: "Canis Den",
-    title: {
-      default: content.metadataTitle,
-      template: `%s | ${content.title}`,
-    },
+    title: content.badge,
     description: content.metadataDescription,
-    keywords: ["Canis Den", content.name, "LinkTree", "portfolio", "links"],
+    keywords: [
+      "Canis Den",
+      content.name,
+      "九宵",
+      "犬系",
+      "可愛犬窩",
+      "link in bio",
+      "portfolio",
+      "social links",
+    ],
     authors: [{ name: content.name }],
     creator: content.name,
     publisher: content.title,
