@@ -86,8 +86,8 @@ export async function generateMetadata({
       images: [
         {
           url: ogImage,
-          width: 1200,
-          height: 630,
+          width: 1672,
+          height: 941,
           alt: `${content.metadataTitle} preview`,
         },
       ],
@@ -96,7 +96,12 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: content.metadataTitle,
       description: content.metadataDescription,
-      images: [ogImage],
+      images: [
+        {
+          url: ogImage,
+          alt: `${content.metadataTitle} preview`,
+        },
+      ],
     },
     robots: {
       index: true,
