@@ -21,13 +21,6 @@ export function proxy(request: NextRequest) {
     (item) => pathname === `/${item}` || pathname.startsWith(`/${item}/`)
   )
 
-  if (
-    legacyLocale &&
-    pathname === `/${legacyLocale}/opengraph-image`
-  ) {
-    return NextResponse.next()
-  }
-
   if (legacyLocale) {
     const legacyDomain =
       parseLinkDomainSlug(url.searchParams.get("tab")) ?? "general"

@@ -45,7 +45,7 @@ export async function generateMetadata({
   const domain =
     parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
   const ogImageVersion = await getOgImageVersion()
-  const ogImage = `/${locale}/opengraph-image?v=${ogImageVersion}`
+  const ogImage = `/og.jpg?v=${ogImageVersion}`
 
   return {
     metadataBase: siteUrl,
