@@ -143,7 +143,7 @@ export const en = {
     retry: "Try again",
   },
   contactEmail: {
-    subjectPrefix: "Canis Den Contact Form",
+    subjectFormat: "【九宵基地／{type}】{subject}",
     replyRequested: "Email reply requested",
     noReplyNeeded: "No reply needed",
     from: "From",

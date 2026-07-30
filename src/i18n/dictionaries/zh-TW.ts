@@ -134,7 +134,7 @@ export const zhTW = {
     retry: "重新載入",
   },
   contactEmail: {
-    subjectPrefix: "Canis Den 聯絡表單",
+    subjectFormat: "【九宵基地／{type}】{subject}",
     replyRequested: "希望收到 Email 回覆",
     noReplyNeeded: "不需回覆",
     from: "寄件人",

@@ -117,7 +117,7 @@ export type Dictionary = {
     retry: string
   }
   contactEmail: {
-    subjectPrefix: string
+    subjectFormat: string
     replyRequested: string
     noReplyNeeded: string
     from: string

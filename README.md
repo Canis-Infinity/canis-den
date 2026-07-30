@@ -19,7 +19,35 @@ npm run dev
 - `CONTACT_TO_EMAIL`：聯絡表單收件者。
 - `NEXT_PUBLIC_SITE_URL`：正式網站公開網址，用於 canonical、Sitemap 與結構化資料。
 
-Vercel 可在專案的 Settings、Environment Variables 中分別設定 Production、Preview 與 Development。自行部署時，請透過容器、程序管理器或主機服務注入；不需要在伺服器建立 `.env.local`。
+正式伺服器不需要 `.env.local`。在伺服器的專案目錄建立不進 Git 的 `.env.production`：
+
+```bash
+cp .env.example .env.production
+```
+
+填入正式值後再執行建置。`NEXT_PUBLIC_SITE_URL` 會在建置時寫入前端產物，因此必須在 `npm run build` 之前設定。
+
+## 正式部署
+
+```bash
+npm install
+npm run build
+pm2 start npm --name link_canis_world -- run start
+pm2 save
+```
+
+網站會依 `package.json` 的 `start` 指令監聽 `7342` 連接埠。
+
+後續更新程式時：
+
+```bash
+git pull
+npm install
+npm run build
+pm2 restart link_canis_world
+```
+
+修改 `.env.production` 後也需要重新建置並重新啟動。若改用 Shell 或 PM2 注入環境變數，重新啟動時請加上 `--update-env`。
 
 變數範例請參考 [.env.example](./.env.example)，不要把正式金鑰寫入該檔案。
 

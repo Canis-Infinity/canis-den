@@ -21,7 +21,9 @@ export function createContactEmail({
   copy: Dictionary["contactEmail"]
 }) {
   const { locale, name, email, subject, message, replyPreference } = request
-  const emailSubject = `[${copy.subjectPrefix}][${categoryLabel}] ${subject}`
+  const emailSubject = copy.subjectFormat
+    .replaceAll("{subject}", subject)
+    .replaceAll("{type}", categoryLabel)
   const replyLabel =
     replyPreference === "email" ? copy.replyRequested : copy.noReplyNeeded
   const sentAt = new Intl.DateTimeFormat(localeFormats[locale].dateTime, {
