@@ -89,7 +89,6 @@ export default async function Home({
                 render={
                   <a
                     href={item.href}
-                    target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noreferrer" : undefined}
                   />
                 }

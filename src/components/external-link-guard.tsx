@@ -85,8 +85,11 @@ export function ExternalLinkGuard({
     event.preventDefault()
     if (!pendingHref) return
 
-    window.open(pendingHref, "_blank", "noopener,noreferrer")
-    setDialogOpen(false)
+    const anchor = document.createElement("a")
+    anchor.href = pendingHref
+    anchor.rel = "noreferrer"
+    anchor.dataset.skipExternalWarning = ""
+    anchor.click()
   }
 
   let hostname = ""
