@@ -89,6 +89,7 @@ export function ExternalLinkGuard({
     anchor.href = pendingHref
     anchor.rel = "noreferrer"
     anchor.dataset.skipExternalWarning = ""
+    setDialogOpen(false)
     anchor.click()
   }
 
