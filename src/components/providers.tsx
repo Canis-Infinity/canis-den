@@ -4,6 +4,7 @@ import NextTopLoader from "nextjs-toploader"
 
 import { PageLoadingState } from "@/components/page-loading-state"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toast"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -23,6 +24,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       />
       <PageLoadingState />
       <TooltipProvider delay={150}>{children}</TooltipProvider>
+      <Toaster />
     </ThemeProvider>
   )
 }

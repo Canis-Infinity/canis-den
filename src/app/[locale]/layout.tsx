@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import { notFound } from "next/navigation"
 
+import { geistMono, notoSansTC } from "@/app/fonts"
 import { Providers } from "@/components/providers"
 import {
   getProfileContent,
@@ -11,16 +11,6 @@ import {
 } from "@/data/profile"
 
 import "../globals.css"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
 
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? profileData.siteUrl)
 
@@ -56,9 +46,7 @@ export async function generateMetadata({
     publisher: content.title,
     alternates: {
       canonical: `/${locale}`,
-      languages: Object.fromEntries(
-        locales.map((item) => [item, `/${item}`])
-      ),
+      languages: Object.fromEntries(locales.map((item) => [item, `/${item}`])),
     },
     icons: {
       icon: "/favicon.ico",
@@ -130,7 +118,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+      className={`${notoSansTC.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">

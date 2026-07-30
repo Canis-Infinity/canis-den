@@ -9,9 +9,11 @@ import {
 } from "lucide-react"
 import { FaLinkedin } from "react-icons/fa"
 import {
+  SiDiscord,
   SiFacebook,
   SiGithub,
   SiInstagram,
+  SiLine,
   SiMastodon,
   SiMedium,
   SiPatreon,
@@ -40,9 +42,11 @@ export const linkIconMap: Record<IconName, IconType> = {
   Link: LinkIcon,
   Mail,
   PenLine,
+  SiDiscord,
   SiFacebook,
   SiGithub,
   SiInstagram,
+  SiLine,
   SiLinkedin: FaLinkedin,
   SiMastodon,
   SiMedium,

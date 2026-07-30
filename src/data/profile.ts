@@ -1,6 +1,7 @@
 import rawProfile from "@/data/profile.json"
 
 export const locales = ["zh-TW", "en"] as const
+export const linkDomains = ["general", "unknown", "work"] as const
 export const iconNames = [
   "BriefcaseBusiness",
   "CalendarDays",
@@ -28,10 +29,13 @@ export const iconNames = [
   "SiWeibo",
   "SiWhatsapp",
   "SiYoutube",
+  "SiLine",
+  "SiDiscord",
 ] as const
 
 export type Locale = (typeof locales)[number]
 export type IconName = (typeof iconNames)[number]
+export type LinkDomain = (typeof linkDomains)[number]
 
 type LocalizedText = Partial<Record<Locale, string>>
 
@@ -86,6 +90,7 @@ export type ProfileLink = {
   description?: LocalizedText
   href: string
   icon: IconName
+  domain: LinkDomain[]
   category?: string
   enabled?: boolean
   external?: boolean
@@ -99,6 +104,7 @@ type RawProfileLink = {
   description?: LocalizedText
   href: string
   icon: IconName
+  domain: LinkDomain[]
   category?: string
   enabled?: boolean
   external?: boolean
@@ -130,6 +136,7 @@ export type ResolvedProfileLink = {
   description?: string
   href: string
   icon: IconName
+  domain: LinkDomain[]
   category: string
   enabled: boolean
   external: boolean
@@ -150,6 +157,10 @@ function isLocale(value: unknown): value is Locale {
 
 function isIconName(value: unknown): value is IconName {
   return typeof value === "string" && iconNames.includes(value as IconName)
+}
+
+function isLinkDomain(value: unknown): value is LinkDomain {
+  return typeof value === "string" && linkDomains.includes(value as LinkDomain)
 }
 
 function isLocalizedText(value: unknown): value is LocalizedText {
@@ -192,6 +203,9 @@ function isProfileLink(value: unknown): value is RawProfileLink {
     (value.description === undefined || isLocalizedText(value.description)) &&
     hasString(value, "href") &&
     isIconName(value.icon) &&
+    Array.isArray(value.domain) &&
+    value.domain.length > 0 &&
+    value.domain.every(isLinkDomain) &&
     (value.category === undefined || typeof value.category === "string") &&
     (value.enabled === undefined || typeof value.enabled === "boolean") &&
     (value.external === undefined || typeof value.external === "boolean") &&
@@ -296,6 +310,7 @@ function resolveProfileLink(
     description: resolveLocalizedText(link.description, locale, defaultLocale),
     href: link.href,
     icon: link.icon,
+    domain: link.domain,
     category: link.category ?? "links",
     enabled: link.enabled ?? true,
     external: link.external ?? !link.href.startsWith("mailto:"),

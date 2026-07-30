@@ -23,13 +23,19 @@ export default function Error({
 
   return (
     <StatusPage
-      code="5XX"
+      code={copy.errorCode}
       title={copy.errorTitle}
       description={copy.errorDescription}
       actions={[
         { label: copy.retry, onClick: reset },
         { label: copy.home, href: `/${locale}` },
       ]}
-    />
+    >
+      {error.digest ? (
+        <code className="mt-2 max-w-full break-all rounded-md border bg-muted px-2 py-1 font-mono text-xs text-foreground">
+          {copy.errorReference}: {error.digest}
+        </code>
+      ) : null}
+    </StatusPage>
   )
 }

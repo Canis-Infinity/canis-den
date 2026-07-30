@@ -1,11 +1,10 @@
-import {
-  ArrowUpRight,
-  Mail,
-} from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { notFound } from "next/navigation"
 
 import { LanguageSelect } from "@/components/language-select"
+import { ContactDialog } from "@/components/contact-dialog"
 import { LinkCommandMenu } from "@/components/link-command-menu"
+import { LinkDomainTabs } from "@/components/link-domain-tabs"
 import { ModeToggle } from "@/components/mode-toggle"
 import { ScrollControls } from "@/components/scroll-controls"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -17,6 +16,7 @@ import {
   getProfileContent,
   getProfileLinks,
   isSupportedLocale,
+  linkDomains,
   profileData,
 } from "@/data/profile"
 import { linkIconMap } from "@/lib/link-icons"
@@ -34,6 +34,75 @@ export default async function Home({
 
   const content = getProfileContent(locale)
   const links = getProfileLinks(locale)
+  const domainLabels =
+    locale === "zh-TW"
+      ? {
+          general: "一般領域",
+          unknown: "未知領域",
+          work: "工作領域",
+        }
+      : {
+          general: "General",
+          unknown: "Unknown",
+          work: "Work",
+        }
+  const agePrompt =
+    locale === "zh-TW"
+      ? {
+          title: "你已年滿 18 歲嗎？",
+          description: "未知領域可能包含成人內容，請確認你已年滿 18 歲。",
+          cancel: "尚未滿 18 歲",
+          confirm: "我已年滿 18 歲",
+        }
+      : {
+          title: "Are you 18 or older?",
+          description:
+            "The Unknown section may contain adult content. Please confirm that you are at least 18 years old.",
+          cancel: "I am under 18",
+          confirm: "I am 18 or older",
+        }
+  const renderDomain = (domain: (typeof linkDomains)[number]) =>
+    links
+      .filter((item) => item.domain.includes(domain))
+      .map((item) => {
+        const Icon = linkIconMap[item.icon]
+
+        return (
+          <Button
+            key={`${item.title}-${item.href}`}
+            render={
+              <a
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+              />
+            }
+            nativeButton={false}
+            variant="outline"
+            className="h-auto w-full min-w-0 justify-between overflow-hidden px-4 py-3"
+          >
+            <span className="flex min-w-0 items-center gap-3">
+              <Icon className="size-4" />
+              <span className="min-w-0 text-left">
+                <span className="block truncate text-sm font-medium">
+                  {item.title}
+                </span>
+                {item.description ? (
+                  <span className="block truncate text-xs opacity-70">
+                    {item.description}
+                  </span>
+                ) : null}
+              </span>
+            </span>
+            <ArrowUpRight className="size-4" />
+          </Button>
+        )
+      })
+  const domainContent = {
+    general: renderDomain("general"),
+    unknown: renderDomain("unknown"),
+    work: renderDomain("work"),
+  }
   const canonicalUrl = new URL(`/${locale}`, profileData.siteUrl).toString()
   const jsonLd = {
     "@context": "https://schema.org",
@@ -69,7 +138,7 @@ export default async function Home({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ScrollControls label={content.backToTop} />
-      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+      <div className="mx-auto flex w-full max-w-md min-w-0 flex-col gap-4">
         <div className="flex items-center justify-between">
           <Badge variant="outline">{content.badge}</Badge>
           <div className="flex items-center gap-2">
@@ -106,54 +175,15 @@ export default async function Home({
               </p>
             ) : null}
             <Separator className="my-5" />
-            <Button
-              render={<a href={`mailto:${profileData.email}`} />}
-              nativeButton={false}
-              variant="outline"
-              className="w-full"
-            >
-              <Mail />
-              {content.contact}
-            </Button>
+            <ContactDialog locale={locale} triggerLabel={content.contact} />
           </CardContent>
         </Card>
 
-        <section aria-label={content.linksLabel} className="grid gap-3">
-          {links.map((item) => {
-            const Icon = linkIconMap[item.icon]
-
-            return (
-              <Button
-                key={`${item.title}-${item.href}`}
-                render={
-                  <a
-                    href={item.href}
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noreferrer" : undefined}
-                  />
-                }
-                nativeButton={false}
-                variant="outline"
-                className="h-auto w-full justify-between px-4 py-3"
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <Icon className="size-4" />
-                  <span className="min-w-0 text-left">
-                    <span className="block truncate text-sm font-medium">
-                      {item.title}
-                    </span>
-                    {item.description ? (
-                      <span className="block truncate text-xs opacity-70">
-                        {item.description}
-                      </span>
-                    ) : null}
-                  </span>
-                </span>
-                <ArrowUpRight className="size-4" />
-              </Button>
-            )
-          })}
-        </section>
+        <LinkDomainTabs
+          content={domainContent}
+          labels={domainLabels}
+          agePrompt={agePrompt}
+        />
 
         <footer className="pb-2 pt-1 text-center text-xs text-muted-foreground">
           © 2026 Canis

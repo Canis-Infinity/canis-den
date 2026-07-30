@@ -58,6 +58,7 @@
       },
       "href": "https://www.instagram.com/canis_infinity",
       "icon": "SiInstagram",
+      "domain": ["general"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -74,6 +75,7 @@
       },
       "href": "https://www.instagram.com/canis_puppy",
       "icon": "SiInstagram",
+      "domain": ["unknown"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -90,6 +92,7 @@
       },
       "href": "https://x.com/canis22788",
       "icon": "SiX",
+      "domain": ["unknown"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -106,6 +109,7 @@
       },
       "href": "https://x.com/iistw22788",
       "icon": "SiX",
+      "domain": ["general"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -122,6 +126,7 @@
       },
       "href": "https://bumpmaps.com/p/paIujwKRkNkBI",
       "icon": "Globe",
+      "domain": ["general", "unknown"],
       "category": "community",
       "enabled": true,
       "external": true,
@@ -137,7 +142,8 @@
         "en": "My Discord account!"
       },
       "href": "https://discord.gg/NRxAazWy",
-      "icon": "Globe",
+      "icon": "SiDiscord",
+      "domain": ["general"],
       "category": "community",
       "enabled": true,
       "external": true,
@@ -154,6 +160,7 @@
       },
       "href": "https://www.threads.com/@canis_infinity",
       "icon": "SiThreads",
+      "domain": ["general"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -170,6 +177,7 @@
       },
       "href": "https://www.threads.com/@canis_puppy",
       "icon": "SiThreads",
+      "domain": ["unknown"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -186,6 +194,7 @@
       },
       "href": "https://www.facebook.com/canis.infinity",
       "icon": "SiFacebook",
+      "domain": ["general"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -202,6 +211,7 @@
       },
       "href": "https://retro.com/@canis22788",
       "icon": "SiRetroarch",
+      "domain": ["general"],
       "category": "community",
       "enabled": true,
       "external": true,
@@ -218,6 +228,7 @@
       },
       "href": "https://iistw.com/",
       "icon": "Globe",
+      "domain": ["work"],
       "category": "site",
       "enabled": true,
       "external": true,
@@ -234,6 +245,7 @@
       },
       "href": "https://blog.iistw.com/",
       "icon": "FileText",
+      "domain": ["work"],
       "category": "site",
       "enabled": true,
       "external": true,
@@ -250,6 +262,7 @@
       },
       "href": "https://resume.iistw.com/",
       "icon": "BriefcaseBusiness",
+      "domain": ["work"],
       "category": "profile",
       "enabled": true,
       "external": true,
@@ -266,6 +279,7 @@
       },
       "href": "https://github.com/Canis-Infinity",
       "icon": "SiGithub",
+      "domain": ["work"],
       "category": "social",
       "enabled": true,
       "external": true,
@@ -282,10 +296,45 @@
       },
       "href": "https://www.linkedin.com/in/canis22788/",
       "icon": "SiLinkedin",
+      "domain": ["work"],
       "category": "social",
       "enabled": true,
       "external": true,
       "priority": 80
+    },
+    {
+      "title": {
+        "zh-TW": "Canis 的 LINE 貼圖",
+        "en": "Canis's LINE Stickers"
+      },
+      "description": {
+        "zh-TW": "我的 LINE 貼圖商店！",
+        "en": "My LINE sticker store!"
+      },
+      "href": "https://store.line.me/emojishop/author/10203822/",
+      "icon": "SiLine",
+      "domain": ["general"],
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 85
+    },
+    {
+      "title": {
+        "zh-TW": "汪の表情日記｜LINE 貼圖",
+        "en": "Pup's Mood Diary | LINE Stickers"
+      },
+      "description": {
+        "zh-TW": "從開心到委屈、從害羞到色色（欸），狗系少年的一天，用 24 張可愛表情說出你的小情緒！搭配可愛又有點欠摸的臉蛋，快把「汪の表情日記」帶回家，讓牠陪你度過每一刻吧！",
+        "en": "24 moods of a puppy boy! From happy and shy to spicy and sleepy--'Pup's Mood Diary' says what you feel, so you don't have to!"
+      },
+      "href": "https://store.line.me/emojishop/product/67edf0966d0b246b2d83da25/",
+      "icon": "SiLine",
+      "domain": ["general"],
+      "category": "social",
+      "enabled": true,
+      "external": true,
+      "priority": 90
     }
   ]
 }
