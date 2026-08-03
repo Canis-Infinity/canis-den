@@ -3,9 +3,13 @@ import { createProfileRepository } from "@/data/profile-repository"
 import { parseProfileData } from "@/data/profile-schema"
 
 const repository = createProfileRepository(parseProfileData(rawProfile))
-const apiBaseUrl =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:7344"
+const publicApiBaseUrl =
+  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || ""
+const internalApiBaseUrl =
+  process.env.INTERNAL_API_BASE_URL ||
+  (process.env.NODE_ENV === "development"
+    ? "http://localhost:7344"
+    : "http://host.docker.internal:7344")
 
 export const profileData = repository.profileData
 export const getProfileContent = repository.getContent
@@ -13,7 +17,7 @@ export const getProfileLinks = repository.getLinks
 
 export async function getRuntimeProfileRepository() {
   try {
-    const response = await fetch(`${apiBaseUrl}/api/profile`, {
+    const response = await fetch(`${internalApiBaseUrl}/api/profile`, {
       next: { revalidate: 60 },
     })
 
@@ -27,7 +31,7 @@ export async function getRuntimeProfileRepository() {
       delete profile[field]
     }
     if (profile.avatar && !/^https?:\/\//.test(profile.avatar)) {
-      profile.avatar = `${apiBaseUrl}/${String(profile.avatar).replace(/^\//, "")}`
+      profile.avatar = `${publicApiBaseUrl}/${String(profile.avatar).replace(/^\//, "")}`
     }
 
     return createProfileRepository(parseProfileData(profile))

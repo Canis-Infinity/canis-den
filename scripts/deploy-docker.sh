@@ -43,6 +43,7 @@ if [ "$APP_NETWORK_MODE" = "host" ]; then
     --name "$APP_NAME" \
     --restart unless-stopped \
     --network host \
+    --add-host host.docker.internal:host-gateway \
     --env-file "$ENV_FILE" \
     -e NODE_ENV=production \
     -e HOSTNAME=0.0.0.0 \
@@ -52,6 +53,7 @@ else
   docker run -d \
     --name "$APP_NAME" \
     --restart unless-stopped \
+    --add-host host.docker.internal:host-gateway \
     --env-file "$ENV_FILE" \
     -e NODE_ENV=production \
     -e HOSTNAME=0.0.0.0 \

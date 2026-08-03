@@ -15,7 +15,8 @@ npm run dev
 `.env.local` 僅供本機開發使用，不應提交至版本控制。正式環境請在部署平台或執行服務的環境變數設定中提供：
 
 - `NEXT_PUBLIC_SITE_URL`：正式網站公開網址，用於 canonical、Sitemap 與結構化資料。
-- `NEXT_PUBLIC_API_BASE_URL`：後端 API 網址，聯絡表單會送到 `${NEXT_PUBLIC_API_BASE_URL}/api/contact`。
+- `NEXT_PUBLIC_API_BASE_URL`：瀏覽器端 API 基底，正式環境使用 `/`，由同源 Next.js rewrite 代理。
+- `INTERNAL_API_BASE_URL`：Next.js container 連 backend 的內部位址，Docker 預設為 `http://host.docker.internal:7344`。
 
 聯絡通知由 backend 呼叫 Resend Email API；`RESEND_API_KEY`、`CONTACT_FROM_EMAIL`、`CONTACT_TO_EMAIL` 應設定在 backend，不需要放進 canis-den 的正式環境。
 
@@ -47,7 +48,7 @@ sh scripts/deploy-docker.sh
 APP_NETWORK_MODE=bridge sh scripts/deploy-docker.sh
 ```
 
-網站會由 `link_canis_world` container 監聽 `7342` 連接埠，並呼叫 backend 的 `7344` API。
+網站會由 `link_canis_world` container 監聽 `7342` 連接埠。瀏覽器呼叫同源 `/api/*`，再由 Next.js container 代理到 backend 的 `7344` API。
 
 後續更新程式時：
 
