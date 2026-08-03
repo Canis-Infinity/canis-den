@@ -31,26 +31,16 @@ npm run dev
 docker compose up -d --force-recreate
 ```
 
-若 server 只有 Docker CLI：
-
-```bash
-sh scripts/deploy-docker.sh
-```
-
-`scripts/deploy-docker.sh` 預設使用 host network，適合舊版 Docker 或 bridge network 不穩的主機。若要改回一般 port mapping，可執行：
-
-```bash
-APP_NETWORK_MODE=bridge sh scripts/deploy-docker.sh
-```
-
 網站會由 `link_canis_world` container 監聽 `7342` 連接埠。瀏覽器呼叫同源 `/api/*`，再由 Next.js container 代理到 backend 的 `7344` API。
 
 後續更新程式時：
 
 ```bash
 git pull
-sh scripts/deploy-docker.sh
+docker compose up -d --force-recreate
 ```
+
+Compose 會清除舊 `.next` 並從目前 Git source 重新建置，因此不會沿用舊 image 或舊前端產物。
 
 如需改用其他 backend 位址，可先設定 `INTERNAL_API_BASE_URL`，再重新執行相同的 Compose 指令。
 

@@ -1,20 +1,31 @@
 services:
   canis-den:
-    build:
-      context: .
-      args:
-        NEXT_PUBLIC_SITE_URL: https://link.canis.world
-        INTERNAL_API_BASE_URL: ${INTERNAL_API_BASE_URL:-http://host.docker.internal:7344}
-    image: canis-den:latest
-    pull_policy: build
+    image: node:24-alpine
     container_name: link_canis_world
+    working_dir: /app
     restart: unless-stopped
     environment:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
       PORT: 7342
+      NEXT_PUBLIC_SITE_URL: https://link.canis.world
       INTERNAL_API_BASE_URL: ${INTERNAL_API_BASE_URL:-http://host.docker.internal:7344}
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - .:/app
+      - canis-den-node-modules:/app/node_modules
+      - canis-den-next:/app/.next
+    command: sh -c "npm ci --legacy-peer-deps --include=dev && find .next -mindepth 1 -maxdepth 1 -exec rm -rf {} + && npm run build && rm -rf .next/standalone/public .next/standalone/.next/static && mkdir -p .next/standalone/.next && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && node .next/standalone/server.js"
     ports:
       - "7342:7342"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:7342/zh-TW >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  canis-den-node-modules:
+  canis-den-next:
