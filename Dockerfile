@@ -11,9 +11,9 @@ RUN npm ci --legacy-peer-deps --no-audit --no-fund
 FROM base AS builder
 
 ARG NEXT_PUBLIC_SITE_URL
-ARG NEXT_PUBLIC_API_BASE_URL
+ARG INTERNAL_API_BASE_URL
 ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
-ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+ENV INTERNAL_API_BASE_URL=${INTERNAL_API_BASE_URL}
 ENV NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -22,12 +22,9 @@ RUN npm run build
 
 FROM base AS runner
 
-ARG NEXT_PUBLIC_API_BASE_URL
-
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=7342
-ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 
 RUN groupadd --system --gid 1001 nodejs \
   && useradd --system --uid 1001 --gid nodejs nextjs

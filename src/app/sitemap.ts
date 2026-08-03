@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next"
 
-import { linkDomains, profileData } from "@/data/profile"
+import { getProfileRepository, linkDomains } from "@/data/profile"
 import { defaultLocale, locales } from "@/i18n/config"
 import { getLinkDomainHref } from "@/lib/link-domain-route"
 
-const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? profileData.siteUrl)
-
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const profileRepository = await getProfileRepository()
+  const siteUrl = new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? profileRepository.profileData.siteUrl
+  )
   return linkDomains.flatMap((domain) =>
     locales.map((locale) => ({
       url: new URL(getLinkDomainHref(domain, locale), siteUrl).toString(),

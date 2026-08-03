@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next"
 
-import { getProfileContent, profileData } from "@/data/profile"
+import { getProfileRepository } from "@/data/profile"
 import { defaultLocale } from "@/i18n/config"
 import { getLinkDomainHref } from "@/lib/link-domain-route"
 
-export default function manifest(): MetadataRoute.Manifest {
-  const content = getProfileContent(defaultLocale)
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const profileRepository = await getProfileRepository()
+  const content = profileRepository.getContent(defaultLocale)
 
   return {
     name: content.metadataTitle,
@@ -28,7 +29,7 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/jpeg",
       },
       {
-        src: profileData.avatar,
+        src: profileRepository.profileData.avatar,
         sizes: "1600x1600",
         type: "image/jpeg",
         purpose: "maskable",

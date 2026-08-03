@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/item"
 import { Separator } from "@/components/ui/separator"
 import {
-  getRuntimeProfileRepository,
+  getProfileRepository,
   linkDomains,
 } from "@/data/profile"
 import { isSupportedLocale } from "@/i18n/config"
@@ -46,7 +46,7 @@ export default async function Home({
     notFound()
   }
 
-  const runtimeProfile = await getRuntimeProfileRepository()
+  const runtimeProfile = await getProfileRepository()
   const runtimeProfileData = runtimeProfile.profileData
   const content = runtimeProfile.getContent(locale)
   const links = runtimeProfile.getLinks(locale)

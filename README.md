@@ -15,25 +15,20 @@ npm run dev
 `.env.local` 僅供本機開發使用，不應提交至版本控制。正式環境請在部署平台或執行服務的環境變數設定中提供：
 
 - `NEXT_PUBLIC_SITE_URL`：正式網站公開網址，用於 canonical、Sitemap 與結構化資料。
-- `NEXT_PUBLIC_API_BASE_URL`：瀏覽器端 API 基底，正式環境使用 `/`，由同源 Next.js rewrite 代理。
 - `INTERNAL_API_BASE_URL`：Next.js container 連 backend 的內部位址，Docker 預設為 `http://host.docker.internal:7344`。
+
+瀏覽器固定呼叫同源 `/api/*`，不接受環境變數改成 `localhost` 或其他主機。
 
 聯絡通知由 backend 呼叫 Resend Email API；`RESEND_API_KEY`、`CONTACT_FROM_EMAIL`、`CONTACT_TO_EMAIL` 應設定在 backend，不需要放進 canis-den 的正式環境。
 
-正式伺服器不需要 `.env.local`。在伺服器的專案目錄建立不進 Git 的 `.env.production`：
-
-```bash
-cp .env.example .env.production
-```
-
-填入正式值後再執行建置。`NEXT_PUBLIC_SITE_URL` 與 `NEXT_PUBLIC_API_BASE_URL` 會在建置時寫入前端產物，因此必須在 `npm run build` 之前設定。
+正式伺服器不需要 `.env.local` 或 `.env.production`。`docker-compose.yml` 已包含正式站台網址、backend 內部預設位址及自動建置設定。
 
 ## 正式部署
 
 若 server 有 Docker Compose：
 
 ```bash
-docker compose --env-file .env.production up -d --build
+docker compose up -d --force-recreate
 ```
 
 若 server 只有 Docker CLI：
@@ -57,7 +52,7 @@ git pull
 sh scripts/deploy-docker.sh
 ```
 
-修改 `.env.production` 後也需要重新建置並重新啟動。`NEXT_PUBLIC_SITE_URL` 與 `NEXT_PUBLIC_API_BASE_URL` 會透過 build arg 寫入前端產物。
+如需改用其他 backend 位址，可先設定 `INTERNAL_API_BASE_URL`，再重新執行相同的 Compose 指令。
 
 若 server 上仍有舊的 PM2 服務，切換前請先停止：
 

@@ -8,7 +8,7 @@ import { notFound } from "next/navigation"
 
 import { geistMono, notoSansTC } from "@/app/fonts"
 import { Providers } from "@/components/providers"
-import { getProfileContent, profileData } from "@/data/profile"
+import { getProfileRepository } from "@/data/profile"
 import { isSupportedLocale, localeFormats, locales } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import {
@@ -17,8 +17,6 @@ import {
 } from "@/lib/link-domain-route"
 
 import "../globals.css"
-
-const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? profileData.siteUrl)
 
 async function getOgImageVersion() {
   const image = await readFile(join(process.cwd(), "public", "og.jpg"))
@@ -40,7 +38,11 @@ export async function generateMetadata({
   if (!isSupportedLocale(locale)) {
     notFound()
   }
-  const content = getProfileContent(locale)
+  const profileRepository = await getProfileRepository()
+  const content = profileRepository.getContent(locale)
+  const siteUrl = new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? profileRepository.profileData.siteUrl
+  )
   const requestHeaders = await headers()
   const domain =
     parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
