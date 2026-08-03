@@ -24,10 +24,8 @@ import {
 } from "@/components/ui/item"
 import { Separator } from "@/components/ui/separator"
 import {
-  getProfileContent,
-  getProfileLinks,
+  getRuntimeProfileRepository,
   linkDomains,
-  profileData,
 } from "@/data/profile"
 import { isSupportedLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
@@ -48,8 +46,10 @@ export default async function Home({
     notFound()
   }
 
-  const content = getProfileContent(locale)
-  const links = getProfileLinks(locale)
+  const runtimeProfile = await getRuntimeProfileRepository()
+  const runtimeProfileData = runtimeProfile.profileData
+  const content = runtimeProfile.getContent(locale)
+  const links = runtimeProfile.getLinks(locale)
   const dictionary = getDictionary(locale)
   const requestHeaders = await headers()
   const activeDomain =
@@ -122,7 +122,7 @@ export default async function Home({
   }
   const canonicalUrl = new URL(
     getLinkDomainHref(activeDomain, locale),
-    profileData.siteUrl
+    runtimeProfileData.siteUrl
   ).toString()
   const jsonLd = {
     "@context": "https://schema.org",
@@ -135,8 +135,8 @@ export default async function Home({
       "@type": "Person",
       name: content.name,
       alternateName: content.handle,
-      image: new URL(profileData.avatar, profileData.siteUrl).toString(),
-      email: profileData.email,
+      image: new URL(runtimeProfileData.avatar, runtimeProfileData.siteUrl).toString(),
+      email: runtimeProfileData.email,
       url: canonicalUrl,
       sameAs: links.filter((link) => link.external).map((link) => link.href),
     },
@@ -168,7 +168,7 @@ export default async function Home({
             <LinkCommandMenu
               links={links}
               locale={locale}
-              contactHref={`mailto:${profileData.email}`}
+              contactHref={`mailto:${runtimeProfileData.email}`}
               contactLabel={dictionary.profile.contact}
               languageLabel={dictionary.profile.language}
               themeLabel={dictionary.profile.themeToggle}
@@ -191,7 +191,7 @@ export default async function Home({
         <Card className="py-0">
           <CardContent className="flex flex-col items-center px-6 pt-7 pb-5 text-center">
             <Avatar className="size-24">
-              <AvatarImage src={profileData.avatar} alt={content.name} />
+              <AvatarImage src={runtimeProfileData.avatar} alt={content.name} />
               <AvatarFallback>{content.name.slice(0, 1)}</AvatarFallback>
             </Avatar>
             <h1 className="mt-4 text-2xl font-semibold">{content.handle}</h1>

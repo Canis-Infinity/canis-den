@@ -14,10 +14,10 @@ npm run dev
 
 `.env.local` 僅供本機開發使用，不應提交至版本控制。正式環境請在部署平台或執行服務的環境變數設定中提供：
 
-- `RESEND_API_KEY`：Resend API 金鑰。未設定時，聯絡表單 API 會回傳 `503`。
-- `CONTACT_FROM_EMAIL`：已在 Resend 驗證的寄件者。
-- `CONTACT_TO_EMAIL`：聯絡表單收件者。
 - `NEXT_PUBLIC_SITE_URL`：正式網站公開網址，用於 canonical、Sitemap 與結構化資料。
+- `NEXT_PUBLIC_API_BASE_URL`：後端 API 網址，聯絡表單會送到 `${NEXT_PUBLIC_API_BASE_URL}/api/contact`。
+
+聯絡通知由 backend 呼叫 Resend Email API；`RESEND_API_KEY`、`CONTACT_FROM_EMAIL`、`CONTACT_TO_EMAIL` 應設定在 backend，不需要放進 canis-den 的正式環境。
 
 正式伺服器不需要 `.env.local`。在伺服器的專案目錄建立不進 Git 的 `.env.production`：
 
@@ -25,29 +25,46 @@ npm run dev
 cp .env.example .env.production
 ```
 
-填入正式值後再執行建置。`NEXT_PUBLIC_SITE_URL` 會在建置時寫入前端產物，因此必須在 `npm run build` 之前設定。
+填入正式值後再執行建置。`NEXT_PUBLIC_SITE_URL` 與 `NEXT_PUBLIC_API_BASE_URL` 會在建置時寫入前端產物，因此必須在 `npm run build` 之前設定。
 
 ## 正式部署
 
+若 server 有 Docker Compose：
+
 ```bash
-npm install
-npm run build
-pm2 start npm --name link_canis_world -- run start
-pm2 save
+docker compose --env-file .env.production up -d --build
 ```
 
-網站會依 `package.json` 的 `start` 指令監聽 `7342` 連接埠。
+若 server 只有 Docker CLI：
+
+```bash
+sh scripts/deploy-docker.sh
+```
+
+`scripts/deploy-docker.sh` 預設使用 host network，適合舊版 Docker 或 bridge network 不穩的主機。若要改回一般 port mapping，可執行：
+
+```bash
+APP_NETWORK_MODE=bridge sh scripts/deploy-docker.sh
+```
+
+網站會由 `link_canis_world` container 監聽 `7342` 連接埠，並呼叫 backend 的 `7344` API。
 
 後續更新程式時：
 
 ```bash
 git pull
-npm install
-npm run build
-pm2 restart link_canis_world
+sh scripts/deploy-docker.sh
 ```
 
-修改 `.env.production` 後也需要重新建置並重新啟動。若改用 Shell 或 PM2 注入環境變數，重新啟動時請加上 `--update-env`。
+修改 `.env.production` 後也需要重新建置並重新啟動。`NEXT_PUBLIC_SITE_URL` 與 `NEXT_PUBLIC_API_BASE_URL` 會透過 build arg 寫入前端產物。
+
+若 server 上仍有舊的 PM2 服務，切換前請先停止：
+
+```bash
+pm2 stop link_canis_world
+pm2 delete link_canis_world
+pm2 save
+```
 
 變數範例請參考 [.env.example](./.env.example)，不要把正式金鑰寫入該檔案。
 
