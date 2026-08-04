@@ -8,6 +8,7 @@ import { PageLoadingState } from "@/components/page-loading-state"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toast"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { VisitTracker } from "@/components/visit-tracker"
 import type { Dictionary } from "@/i18n/types"
 
 export function Providers({
@@ -34,6 +35,7 @@ export function Providers({
         showSpinner={false}
       />
       <PageLoadingState />
+      <VisitTracker />
       <ExternalLinkGuard copy={externalLinkCopy}>
         <TooltipProvider delay={150}>{children}</TooltipProvider>
       </ExternalLinkGuard>
