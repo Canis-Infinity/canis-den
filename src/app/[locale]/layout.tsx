@@ -59,7 +59,7 @@ export async function generateMetadata({
     description: content.metadataDescription,
     keywords: [
       "Canis Den",
-      content.name,
+      content.handle,
       "九宵",
       "犬系",
       "可愛犬窩",
@@ -67,8 +67,8 @@ export async function generateMetadata({
       "portfolio",
       "social links",
     ],
-    authors: [{ name: content.name }],
-    creator: content.name,
+    authors: [{ name: content.handle }],
+    creator: content.handle,
     publisher: content.title,
     alternates: {
       canonical: getLinkDomainHref(domain, locale),

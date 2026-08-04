@@ -20,7 +20,6 @@ export type LinkDomain = DomainKey
 export type LocalizedText = Partial<Record<Locale, string>>
 
 export type ProfileContent = {
-  name: string
   handle: string
   title: string
   badge: string

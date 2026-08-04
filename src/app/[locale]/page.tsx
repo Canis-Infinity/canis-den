@@ -136,8 +136,8 @@ export default async function Home({
     inLanguage: locale,
     mainEntity: {
       "@type": "Person",
-      name: content.name,
-      alternateName: content.handle,
+      name: content.handle,
+      alternateName: content.title,
       image: new URL(runtimeProfileData.avatar, runtimeProfileData.siteUrl).toString(),
       email: runtimeProfileData.email,
       url: canonicalUrl,
@@ -194,8 +194,8 @@ export default async function Home({
         <Card className="py-0">
           <CardContent className="flex flex-col items-center px-6 pt-7 pb-5 text-center">
             <Avatar className="size-24">
-              <AvatarImage src={runtimeProfileData.avatar} alt={content.name} />
-              <AvatarFallback>{content.name.slice(0, 1)}</AvatarFallback>
+              <AvatarImage src={runtimeProfileData.avatar} alt={content.handle} />
+              <AvatarFallback>{content.handle.slice(0, 1)}</AvatarFallback>
             </Avatar>
             <h1 className="mt-4 text-2xl font-semibold">{content.handle}</h1>
             {content.description ? (

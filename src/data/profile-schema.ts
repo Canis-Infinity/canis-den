@@ -52,7 +52,6 @@ const profileDataSchema = z
   .superRefine((value, context) => {
     const fallback = value.profile[defaultLocale]
     const required = [
-      "name",
       "handle",
       "title",
       "badge",

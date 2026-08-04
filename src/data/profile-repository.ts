@@ -20,7 +20,6 @@ function resolveContent(data: RawProfileData, locale: Locale): ProfileContent {
   }
 
   return {
-    name: required("name"),
     handle: required("handle"),
     title: required("title"),
     badge: required("badge"),
