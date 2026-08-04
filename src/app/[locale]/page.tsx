@@ -35,6 +35,9 @@ import {
   parseLinkDomainSlug,
 } from "@/lib/link-domain-route"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function Home({
   params,
 }: {

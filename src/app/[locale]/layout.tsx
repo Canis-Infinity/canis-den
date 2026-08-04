@@ -18,6 +18,9 @@ import {
 
 import "../globals.css"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 async function getOgImageVersion() {
   const image = await readFile(join(process.cwd(), "public", "og.jpg"))
 
