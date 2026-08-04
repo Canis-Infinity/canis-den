@@ -3,6 +3,13 @@
 import type { ReactNode } from "react"
 
 import { AgeGateDialogs } from "@/components/age-gate-dialogs"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { linkDomains, type LinkDomain } from "@/data/profile"
 import { useLinkDomainNavigation } from "@/hooks/use-link-domain-navigation"
@@ -35,30 +42,32 @@ export function LinkDomainTabs({
         onValueChange={(value) =>
           navigation.requestDomain(value as LinkDomain)
         }
-        className="w-full min-w-0 gap-4"
+        className="w-full min-w-0 gap-3"
       >
-        <div className="sticky top-2 z-10 rounded-xl border bg-card/95 px-3 pb-2 pt-1.5 shadow-sm backdrop-blur-md">
-          <TabsList variant="line" className="h-9 w-full">
-            {linkDomains.map((domain) => (
-              <TabsTrigger key={domain} value={domain}>
-                {labels[domain]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
-
-        <p className="px-2 text-center text-pretty text-sm leading-6 text-muted-foreground">
-          {descriptions[navigation.activeDomain]}
-        </p>
+        <TabsList className="w-full">
+          {linkDomains.map((domain) => (
+            <TabsTrigger key={domain} value={domain}>
+              {labels[domain]}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
         {linkDomains.map((domain) => (
           <TabsContent
             key={domain}
             value={domain}
             aria-label={labels[domain]}
-            className="grid w-full min-w-0 gap-3 overflow-hidden"
+            className="w-full min-w-0"
           >
-            {content[domain]}
+            <Card>
+              <CardHeader>
+                <CardTitle>{labels[domain]}</CardTitle>
+                <CardDescription>{descriptions[domain]}</CardDescription>
+              </CardHeader>
+              <CardContent className="grid min-w-0 gap-3">
+                {content[domain]}
+              </CardContent>
+            </Card>
           </TabsContent>
         ))}
       </Tabs>
