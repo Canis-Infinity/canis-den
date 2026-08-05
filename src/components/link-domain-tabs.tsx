@@ -3,13 +3,6 @@
 import type { ReactNode } from "react"
 
 import { AgeGateDialogs } from "@/components/age-gate-dialogs"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { linkDomains, type LinkDomain } from "@/data/profile"
 import { useLinkDomainNavigation } from "@/hooks/use-link-domain-navigation"
@@ -61,15 +54,14 @@ export function LinkDomainTabs({
             aria-label={labels[domain]}
             className="w-full min-w-0"
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>{labels[domain]}</CardTitle>
-                <CardDescription>{descriptions[domain]}</CardDescription>
-              </CardHeader>
-              <CardContent className="grid min-w-0 gap-3">
+            <div className="grid min-w-0 gap-4 px-1 py-2">
+              <p className="text-sm leading-6 text-muted-foreground">
+                {descriptions[domain]}
+              </p>
+              <div className="grid min-w-0 gap-3">
                 {content[domain]}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </TabsContent>
         ))}
       </Tabs>

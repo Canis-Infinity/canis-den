@@ -77,7 +77,7 @@ export const zhTW = {
     namePlaceholder: "如何稱呼你？",
     nameDescription: "請填寫方便我辨識你的名稱。",
     email: "Email",
-    emailPlaceholder: "you@example.com",
+    emailPlaceholder: "例如：example@gmail.com",
     emailDescription: "寄送成功後，我會使用這個地址回覆你。",
     category: "聯絡類型",
     categoryPlaceholder: "選擇最符合的類型",

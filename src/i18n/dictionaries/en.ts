@@ -79,7 +79,7 @@ export const en = {
     namePlaceholder: "How should I address you?",
     nameDescription: "Use a name that helps me identify you.",
     email: "Email",
-    emailPlaceholder: "you@example.com",
+    emailPlaceholder: "e.g. example@gmail.com",
     emailDescription: "I will use this address if a reply is needed.",
     category: "Contact type",
     categoryPlaceholder: "Choose the closest match",
