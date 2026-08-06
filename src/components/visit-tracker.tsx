@@ -18,7 +18,7 @@ export function VisitTracker() {
     fetch("/api/visit", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ site: "canis-den", path }),
       cache: "no-store",
       keepalive: true,
     }).catch(() => {
