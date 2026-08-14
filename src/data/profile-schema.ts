@@ -1,7 +1,6 @@
 import { z } from "zod"
 
 import {
-  iconNames,
   linkDomains,
   type RawProfileData,
 } from "@/data/profile-types"
@@ -30,7 +29,7 @@ const profileLinkSchema = z.object({
   title: localizedTextSchema,
   description: localizedTextSchema.optional(),
   href: z.url(),
-  icon: z.enum(iconNames),
+  icon: z.string().trim().min(1),
   domain: z.array(z.enum(linkDomains)).min(1),
   category: z.string().optional(),
   enabled: z.boolean().optional(),

@@ -1,68 +1,20 @@
-import {
-  BriefcaseBusiness,
-  CalendarDays,
-  FileText,
-  Globe,
-  Link as LinkIcon,
-  Mail,
-  PenLine,
-} from "lucide-react"
+import * as LucideIcons from "lucide-react"
 import { FaLinkedin } from "react-icons/fa"
-import {
-  SiDiscord,
-  SiFacebook,
-  SiGithub,
-  SiInstagram,
-  SiLine,
-  SiMastodon,
-  SiMedium,
-  SiPatreon,
-  SiPaypal,
-  SiPixiv,
-  SiQq,
-  SiRetroarch,
-  SiSinaweibo,
-  SiTelegram,
-  SiThreads,
-  SiTiktok,
-  SiWechat,
-  SiWhatsapp,
-  SiX,
-  SiYoutube,
-} from "react-icons/si"
+import * as SimpleIcons from "react-icons/si"
 import type { IconType } from "react-icons"
 
 import type { IconName, ResolvedProfileLink } from "@/data/profile"
 
-export const linkIconMap: Record<IconName, IconType> = {
-  BriefcaseBusiness,
-  CalendarDays,
-  FileText,
-  Globe,
-  Link: LinkIcon,
-  Mail,
-  PenLine,
-  SiDiscord,
-  SiFacebook,
-  SiGithub,
-  SiInstagram,
-  SiLine,
+type IconRegistry = Record<string, unknown>
+
+const lucideIconRegistry = LucideIcons as IconRegistry
+const simpleIconRegistry = SimpleIcons as IconRegistry
+
+const fallbackIcon = LucideIcons.Link
+
+const iconAliases: Record<string, IconType> = {
   SiLinkedin: FaLinkedin,
-  SiMastodon,
-  SiMedium,
-  SiPatreon,
-  SiPaypal,
-  SiPixiv,
-  SiQq,
-  SiRetroarch,
-  SiTelegram,
-  SiThreads,
-  SiTiktok,
-  SiWechat,
-  SiWeibo: SiSinaweibo,
-  SiWhatsapp,
-  SiX,
-  SiYoutube,
+  SiWeibo: SimpleIcons.SiSinaweibo,
 }
 
 const platformByIcon: Partial<Record<IconName, string>> = {
@@ -87,6 +39,38 @@ const platformByIcon: Partial<Record<IconName, string>> = {
   SiWhatsapp: "WhatsApp",
   SiX: "X",
   SiYoutube: "YouTube",
+}
+
+function toPascalCaseIconName(value: string) {
+  return value
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join("")
+}
+
+function getRegistryIcon(registry: IconRegistry, name: string) {
+  const icon = registry[name]
+  return typeof icon === "function" ? (icon as IconType) : undefined
+}
+
+export function getLinkIcon(iconName: string | null | undefined): IconType {
+  const name = iconName?.trim()
+  if (!name) return fallbackIcon
+
+  const pascalName = toPascalCaseIconName(name)
+
+  return (
+    iconAliases[name] ??
+    getRegistryIcon(lucideIconRegistry, name) ??
+    getRegistryIcon(lucideIconRegistry, pascalName) ??
+    getRegistryIcon(simpleIconRegistry, name) ??
+    getRegistryIcon(simpleIconRegistry, pascalName) ??
+    fallbackIcon
+  )
 }
 
 export function getLinkPlatform(

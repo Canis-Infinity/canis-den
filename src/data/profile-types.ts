@@ -7,7 +7,7 @@ export const linkDomains = [
   "work",
 ] as const satisfies readonly DomainKey[]
 
-export const iconNames = [
+export const legacyIconNames = [
   "BriefcaseBusiness", "CalendarDays", "FileText", "Globe", "Link", "Mail",
   "PenLine", "SiFacebook", "SiInstagram", "SiRetroarch", "SiThreads", "SiX",
   "SiGithub", "SiLinkedin", "SiMastodon", "SiMedium", "SiPatreon",
@@ -15,7 +15,9 @@ export const iconNames = [
   "SiWeibo", "SiWhatsapp", "SiYoutube", "SiLine", "SiDiscord",
 ] as const
 
-export type IconName = (typeof iconNames)[number]
+export const iconNames = legacyIconNames
+
+export type IconName = string
 export type LinkDomain = DomainKey
 export type LocalizedText = Partial<Record<Locale, string>>
 

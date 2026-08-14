@@ -22,7 +22,7 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import type { ResolvedProfileLink } from "@/data/profile"
 import { localeNames, locales, type Locale } from "@/i18n/config"
 import { useLocaleNavigation } from "@/hooks/use-locale-navigation"
-import { linkIconMap } from "@/lib/link-icons"
+import { getLinkIcon } from "@/lib/link-icons"
 import { getNextTheme } from "@/lib/theme-mode"
 
 type LinkCommandMenuProps = {
@@ -178,7 +178,7 @@ export function LinkCommandMenu({
               <CommandEmpty>{emptyLabel}</CommandEmpty>
               <CommandGroup heading={linksLabel}>
                 {links.map((link) => {
-                  const Icon = linkIconMap[link.icon]
+                  const Icon = getLinkIcon(link.icon)
 
                   return (
                     <CommandItem

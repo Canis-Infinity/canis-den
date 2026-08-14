@@ -29,7 +29,7 @@ import {
 } from "@/data/profile"
 import { isSupportedLocale } from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
-import { getLinkPlatform, linkIconMap } from "@/lib/link-icons"
+import { getLinkIcon, getLinkPlatform } from "@/lib/link-icons"
 import {
   getLinkDomainHref,
   parseLinkDomainSlug,
@@ -71,7 +71,7 @@ export default async function Home({
       {links
         .filter((item) => item.domain.includes(domain))
         .map((item) => {
-          const Icon = linkIconMap[item.icon]
+          const Icon = getLinkIcon(item.icon)
 
           return (
             <ResponsiveTooltip
