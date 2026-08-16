@@ -1,6 +1,7 @@
 import * as LucideIcons from "lucide-react"
 import { FaLinkedin } from "react-icons/fa"
 import * as SimpleIcons from "react-icons/si"
+import type { ComponentType } from "react"
 import type { IconType } from "react-icons"
 
 import type { IconName, ResolvedProfileLink } from "@/data/profile"
@@ -10,9 +11,11 @@ type IconRegistry = Record<string, unknown>
 const lucideIconRegistry = LucideIcons as IconRegistry
 const simpleIconRegistry = SimpleIcons as IconRegistry
 
-const fallbackIcon = LucideIcons.Link
+type LinkIconComponent = ComponentType<{ className?: string }>
 
-const iconAliases: Record<string, IconType> = {
+const fallbackIcon = LucideIcons.Link as LinkIconComponent
+
+const iconAliases: Record<string, LinkIconComponent> = {
   SiLinkedin: FaLinkedin,
   SiWeibo: SimpleIcons.SiSinaweibo,
 }
@@ -54,10 +57,14 @@ function toPascalCaseIconName(value: string) {
 
 function getRegistryIcon(registry: IconRegistry, name: string) {
   const icon = registry[name]
-  return typeof icon === "function" ? (icon as IconType) : undefined
+  return typeof icon === "function" || (typeof icon === "object" && icon)
+    ? (icon as LinkIconComponent)
+    : undefined
 }
 
-export function getLinkIcon(iconName: string | null | undefined): IconType {
+export function getLinkIcon(
+  iconName: string | null | undefined
+): LinkIconComponent {
   const name = iconName?.trim()
   if (!name) return fallbackIcon
 

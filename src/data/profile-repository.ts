@@ -36,16 +36,17 @@ function localize(text: LocalizedText | undefined, locale: Locale) {
 function resolveLink(link: ProfileLink, locale: Locale): ResolvedProfileLink {
   const title = localize(link.title, locale)
   if (!title) throw new Error("Every link title must define the default locale.")
+  const href = link.href.trim()
 
   return {
     title,
     description: localize(link.description, locale),
-    href: link.href,
+    href,
     icon: link.icon,
     domain: link.domain,
     category: link.category ?? "links",
     enabled: link.enabled ?? true,
-    external: link.external ?? !link.href.startsWith("mailto:"),
+    external: link.external ?? !href.startsWith("mailto:"),
     priority: link.priority ?? 100,
   }
 }
