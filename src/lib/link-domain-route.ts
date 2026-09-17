@@ -11,6 +11,11 @@ const domainsBySlug = Object.fromEntries(
   Object.entries(domainSlugs).map(([domain, slug]) => [slug, domain])
 ) as Record<string, LinkDomain>
 
+const sessionKeys = {
+  currentDomain: "CANIS_LINK_DOMAIN",
+  ageVerified: "CANIS_AGE_VERIFIED",
+} as const
+
 export function getLinkDomainSlug(domain: LinkDomain) {
   return domainSlugs[domain]
 }
@@ -28,15 +33,30 @@ export function getLinkDomainHref(domain: LinkDomain, locale: Locale) {
 }
 
 export function getCurrentLinkDomain() {
-  return typeof window === "undefined"
-    ? "general"
-    : (parseLinkDomainPath(window.location.pathname) ?? "general")
+  if (typeof window === "undefined") return "general"
+
+  const rememberedDomain = window.sessionStorage.getItem(
+    sessionKeys.currentDomain
+  )
+
+  return (
+    parseLinkDomainSlug(rememberedDomain) ??
+    parseLinkDomainPath(window.location.pathname) ??
+    "general"
+  )
 }
 
-export function visitLinkDomain(domain: LinkDomain, locale: Locale) {
-  window.history.pushState(null, "", getLinkDomainHref(domain, locale))
+export function rememberCurrentLinkDomain(domain: LinkDomain) {
+  window.sessionStorage.setItem(
+    sessionKeys.currentDomain,
+    getLinkDomainSlug(domain)
+  )
 }
 
-export function replaceLinkDomain(domain: LinkDomain, locale: Locale) {
-  window.history.replaceState(null, "", getLinkDomainHref(domain, locale))
+export function isAgeVerified() {
+  return window.sessionStorage.getItem(sessionKeys.ageVerified) === "true"
+}
+
+export function rememberAgeVerification() {
+  window.sessionStorage.setItem(sessionKeys.ageVerified, "true")
 }

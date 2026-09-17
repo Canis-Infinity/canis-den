@@ -36,12 +36,7 @@ export function AgeGateDialogs({
 }) {
   return (
     <>
-      <AlertDialog
-        open={promptOpen}
-        onOpenChange={(open) => {
-          if (!open) onDeny()
-        }}
-      >
+      <AlertDialog open={promptOpen}>
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
             <AlertDialogMedia>
@@ -61,12 +56,7 @@ export function AgeGateDialogs({
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog
-        open={deniedOpen}
-        onOpenChange={(open) => {
-          if (!open) onDeny()
-        }}
-      >
+      <AlertDialog open={deniedOpen}>
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
             <AlertDialogMedia>

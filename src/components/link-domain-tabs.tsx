@@ -6,27 +6,26 @@ import { AgeGateDialogs } from "@/components/age-gate-dialogs"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { linkDomains, type LinkDomain } from "@/data/profile"
 import { useLinkDomainNavigation } from "@/hooks/use-link-domain-navigation"
-import type { Locale } from "@/i18n/config"
 import type { Dictionary } from "@/i18n/types"
 
 type LinkDomainTabsProps = {
+  initialDomain: LinkDomain
   content: Record<LinkDomain, ReactNode>
   labels: Record<LinkDomain, string>
   descriptions: Record<LinkDomain, string>
-  locale: Locale
   agePrompt: Dictionary["agePrompt"]
   ageDenied: Dictionary["ageDenied"]
 }
 
 export function LinkDomainTabs({
+  initialDomain,
   content,
   labels,
   descriptions,
-  locale,
   agePrompt,
   ageDenied,
 }: LinkDomainTabsProps) {
-  const navigation = useLinkDomainNavigation(locale)
+  const navigation = useLinkDomainNavigation(initialDomain)
 
   return (
     <>

@@ -3,50 +3,34 @@
 import { useEffect, useRef, useState } from "react"
 
 import type { LinkDomain } from "@/data/profile"
-import type { Locale } from "@/i18n/config"
 import {
-  getLinkDomainHref,
-  parseLinkDomainPath,
-  replaceLinkDomain,
-  visitLinkDomain,
+  isAgeVerified,
+  rememberAgeVerification,
+  rememberCurrentLinkDomain,
 } from "@/lib/link-domain-route"
 
-export function useLinkDomainNavigation(locale: Locale) {
-  const [activeDomain, setActiveDomain] = useState<LinkDomain>("general")
+export function useLinkDomainNavigation(initialDomain: LinkDomain) {
+  const [activeDomain, setActiveDomain] = useState<LinkDomain>(() =>
+    initialDomain === "afterDark" ? "general" : initialDomain
+  )
   const [agePromptOpen, setAgePromptOpen] = useState(false)
   const [ageDeniedOpen, setAgeDeniedOpen] = useState(false)
   const ageVerified = useRef(false)
 
   useEffect(() => {
-    function syncFromUrl() {
-      const domain =
-        parseLinkDomainPath(window.location.pathname) ?? "general"
+    ageVerified.current = isAgeVerified()
 
-      if (domain === "afterDark" && !ageVerified.current) {
+    if (initialDomain === "afterDark") {
+      if (ageVerified.current) {
+        setActiveDomain("afterDark")
+        rememberCurrentLinkDomain("afterDark")
+      } else {
         setAgePromptOpen(true)
-        return
       }
-
-      setAgePromptOpen(false)
-      setAgeDeniedOpen(false)
-      setActiveDomain(domain)
+    } else {
+      rememberCurrentLinkDomain(initialDomain)
     }
-
-    if (!parseLinkDomainPath(window.location.pathname)) {
-      window.history.replaceState(
-        null,
-        "",
-        getLinkDomainHref("general", locale)
-      )
-    }
-
-    const timer = window.setTimeout(syncFromUrl, 0)
-    window.addEventListener("popstate", syncFromUrl)
-    return () => {
-      window.clearTimeout(timer)
-      window.removeEventListener("popstate", syncFromUrl)
-    }
-  }, [locale])
+  }, [initialDomain])
 
   function requestDomain(domain: LinkDomain) {
     if (domain === "afterDark" && !ageVerified.current) {
@@ -55,14 +39,16 @@ export function useLinkDomainNavigation(locale: Locale) {
     }
 
     setActiveDomain(domain)
-    visitLinkDomain(domain, locale)
+    rememberCurrentLinkDomain(domain)
   }
 
   function confirmAge() {
     ageVerified.current = true
+    rememberAgeVerification()
     setAgePromptOpen(false)
+    setAgeDeniedOpen(false)
     setActiveDomain("afterDark")
-    visitLinkDomain("afterDark", locale)
+    rememberCurrentLinkDomain("afterDark")
   }
 
   function denyAge() {
@@ -73,7 +59,7 @@ export function useLinkDomainNavigation(locale: Locale) {
   function chooseSafeDomain(domain: Exclude<LinkDomain, "afterDark">) {
     setAgeDeniedOpen(false)
     setActiveDomain(domain)
-    replaceLinkDomain(domain, locale)
+    rememberCurrentLinkDomain(domain)
   }
 
   return {
