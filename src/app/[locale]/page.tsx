@@ -213,7 +213,9 @@ export default async function Home({
         </Card>
 
         <LinkDomainTabs
+          key={activeDomain}
           initialDomain={activeDomain}
+          locale={locale}
           content={domainContent}
           labels={domainLabels}
           descriptions={domainDescriptions}

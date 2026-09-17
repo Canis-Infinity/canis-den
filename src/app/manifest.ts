@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next"
 
 import { getProfileRepository } from "@/data/profile"
 import { defaultLocale } from "@/i18n/config"
-import { getLinkDomainHref } from "@/lib/link-domain-route"
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const profileRepository = await getProfileRepository()
@@ -11,8 +10,9 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
   return {
     name: content.metadataTitle,
     short_name: content.badge,
+    id: "/",
     description: content.metadataDescription,
-    start_url: getLinkDomainHref("general", defaultLocale),
+    start_url: "/",
     scope: "/",
     display: "standalone",
     background_color: "#0a0a0a",

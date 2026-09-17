@@ -55,6 +55,11 @@ export async function generateMetadata({
   return {
     metadataBase: siteUrl,
     applicationName: "Canis Den",
+    appleWebApp: {
+      capable: true,
+      title: content.badge,
+      statusBarStyle: "black-translucent",
+    },
     title: content.badge,
     description: content.metadataDescription,
     keywords: [

@@ -40,8 +40,8 @@ export function getCurrentLinkDomain() {
   )
 
   return (
-    parseLinkDomainSlug(rememberedDomain) ??
     parseLinkDomainPath(window.location.pathname) ??
+    parseLinkDomainSlug(rememberedDomain) ??
     "general"
   )
 }
