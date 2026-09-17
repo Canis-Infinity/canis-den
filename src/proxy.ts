@@ -44,21 +44,15 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    url.pathname = `/${locale}`
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set("x-link-domain", getLinkDomainSlug(domain))
-    return NextResponse.rewrite(url, {
+    requestHeaders.set("x-locale", locale)
+    return NextResponse.next({
       request: { headers: requestHeaders },
     })
   }
 
-  if (localeFromQuery !== locale) {
-    url.searchParams.set("lang", locale)
-    return NextResponse.redirect(url)
-  }
-
-  url.pathname = `/${locale}${pathname}`
-  return NextResponse.rewrite(url)
+  return NextResponse.next()
 }
 
 export const config = {

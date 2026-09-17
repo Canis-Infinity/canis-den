@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect } from "react"
-import { useParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 import { StatusPage } from "@/components/status-page"
+import { isSupportedLocale } from "@/i18n/config"
+import { getLinkDomainHref } from "@/lib/link-domain-route"
 import { getStatusCopy, resolveStatusLocale } from "@/lib/status-copy"
 
 export default function Error({
@@ -13,8 +15,11 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const params = useParams<{ locale?: string }>()
-  const locale = resolveStatusLocale(params.locale)
+  const searchParams = useSearchParams()
+  const requestedLocale = searchParams.get("lang")
+  const locale = resolveStatusLocale(
+    isSupportedLocale(requestedLocale) ? requestedLocale : undefined
+  )
   const copy = getStatusCopy(locale)
 
   useEffect(() => {
@@ -28,7 +33,7 @@ export default function Error({
       description={copy.errorDescription}
       actions={[
         { label: copy.retry, onClick: reset },
-        { label: copy.home, href: `/${locale}` },
+        { label: copy.home, href: getLinkDomainHref("general", locale) },
       ]}
     >
       {error.digest ? (

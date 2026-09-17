@@ -1,5 +1,4 @@
 import { ArrowUpRight, PawPrint } from "lucide-react"
-import { headers } from "next/headers"
 import { notFound } from "next/navigation"
 
 import { LanguageSelect } from "@/components/language-select"
@@ -40,12 +39,19 @@ export const revalidate = 0
 
 export default async function Home({
   params,
+  searchParams,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ domain: string }>
+  searchParams: Promise<{ lang?: string | string[] }>
 }) {
-  const { locale } = await params
+  const [{ domain: domainSlug }, query] = await Promise.all([
+    params,
+    searchParams,
+  ])
+  const locale = typeof query.lang === "string" ? query.lang : undefined
+  const activeDomain = parseLinkDomainSlug(domainSlug)
 
-  if (!isSupportedLocale(locale)) {
+  if (!activeDomain || !isSupportedLocale(locale)) {
     notFound()
   }
 
@@ -54,9 +60,6 @@ export default async function Home({
   const content = runtimeProfile.getContent(locale)
   const links = runtimeProfile.getLinks(locale)
   const dictionary = getDictionary(locale)
-  const requestHeaders = await headers()
-  const activeDomain =
-    parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
   const domainLabels = Object.fromEntries(
     linkDomains.map((domain) => [domain, dictionary.domains[domain].label])
   ) as Record<(typeof linkDomains)[number], string>

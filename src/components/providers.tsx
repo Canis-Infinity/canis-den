@@ -4,7 +4,6 @@ import NextTopLoader from "nextjs-toploader"
 
 import { CookieNotice } from "@/components/cookie-notice"
 import { ExternalLinkGuard } from "@/components/external-link-guard"
-import { PageLoadingState } from "@/components/page-loading-state"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toast"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -34,7 +33,6 @@ export function Providers({
         shadow={false}
         showSpinner={false}
       />
-      <PageLoadingState />
       <VisitTracker />
       <ExternalLinkGuard copy={externalLinkCopy}>
         <TooltipProvider delay={150}>{children}</TooltipProvider>

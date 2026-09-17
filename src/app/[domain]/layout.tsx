@@ -8,11 +8,17 @@ import { notFound } from "next/navigation"
 
 import { geistMono, notoSansTC } from "@/app/fonts"
 import { Providers } from "@/components/providers"
-import { getProfileRepository } from "@/data/profile"
-import { isSupportedLocale, localeFormats, locales } from "@/i18n/config"
+import { getProfileRepository, linkDomains } from "@/data/profile"
+import {
+  defaultLocale,
+  isSupportedLocale,
+  localeFormats,
+  locales,
+} from "@/i18n/config"
 import { getDictionary } from "@/i18n/get-dictionary"
 import {
   getLinkDomainHref,
+  getLinkDomainSlug,
   parseLinkDomainSlug,
 } from "@/lib/link-domain-route"
 
@@ -28,17 +34,21 @@ async function getOgImageVersion() {
 }
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return linkDomains.map((domain) => ({ domain: getLinkDomainSlug(domain) }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ domain: string }>
 }): Promise<Metadata> {
-  const { locale } = await params
+  const { domain: domainSlug } = await params
+  const requestHeaders = await headers()
+  const localeHeader = requestHeaders.get("x-locale")
+  const locale = isSupportedLocale(localeHeader) ? localeHeader : defaultLocale
+  const domain = parseLinkDomainSlug(domainSlug)
 
-  if (!isSupportedLocale(locale)) {
+  if (!domain) {
     notFound()
   }
   const profileRepository = await getProfileRepository()
@@ -46,9 +56,6 @@ export async function generateMetadata({
   const siteUrl = new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? profileRepository.profileData.siteUrl
   )
-  const requestHeaders = await headers()
-  const domain =
-    parseLinkDomainSlug(requestHeaders.get("x-link-domain")) ?? "general"
   const ogImageVersion = await getOgImageVersion()
   const ogImage = `/og.jpg?v=${ogImageVersion}`
 
@@ -145,11 +152,14 @@ export default async function LocaleLayout({
   params,
 }: Readonly<{
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params: Promise<{ domain: string }>
 }>) {
-  const { locale } = await params
+  const { domain: domainSlug } = await params
+  const requestHeaders = await headers()
+  const localeHeader = requestHeaders.get("x-locale")
+  const locale = isSupportedLocale(localeHeader) ? localeHeader : defaultLocale
 
-  if (!isSupportedLocale(locale)) {
+  if (!parseLinkDomainSlug(domainSlug)) {
     notFound()
   }
   const dictionary = getDictionary(locale)
