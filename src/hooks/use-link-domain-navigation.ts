@@ -1,20 +1,22 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 
 import type { LinkDomain } from "@/data/profile"
 import type { Locale } from "@/i18n/config"
 import {
   isAgeVerified,
+  getLinkDomainHref,
   rememberAgeVerification,
   rememberCurrentLinkDomain,
-  replaceLinkDomain,
 } from "@/lib/link-domain-route"
 
 export function useLinkDomainNavigation(
   initialDomain: LinkDomain,
   locale: Locale
 ) {
+  const router = useRouter()
   const [activeDomain, setActiveDomain] = useState<LinkDomain>(() =>
     initialDomain === "afterDark" ? "general" : initialDomain
   )
@@ -45,7 +47,7 @@ export function useLinkDomainNavigation(
 
     setActiveDomain(domain)
     rememberCurrentLinkDomain(domain)
-    replaceLinkDomain(domain, locale)
+    router.replace(getLinkDomainHref(domain, locale), { scroll: false })
   }
 
   function confirmAge() {
@@ -55,7 +57,7 @@ export function useLinkDomainNavigation(
     setAgeDeniedOpen(false)
     setActiveDomain("afterDark")
     rememberCurrentLinkDomain("afterDark")
-    replaceLinkDomain("afterDark", locale)
+    router.replace(getLinkDomainHref("afterDark", locale), { scroll: false })
   }
 
   function denyAge() {
@@ -67,7 +69,7 @@ export function useLinkDomainNavigation(
     setAgeDeniedOpen(false)
     setActiveDomain(domain)
     rememberCurrentLinkDomain(domain)
-    replaceLinkDomain(domain, locale)
+    router.replace(getLinkDomainHref(domain, locale), { scroll: false })
   }
 
   return {

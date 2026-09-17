@@ -46,15 +46,6 @@ export function getCurrentLinkDomain() {
   )
 }
 
-export function replaceLinkDomain(domain: LinkDomain, locale: Locale) {
-  History.prototype.replaceState.call(
-    window.history,
-    window.history.state,
-    "",
-    getLinkDomainHref(domain, locale)
-  )
-}
-
 export function rememberCurrentLinkDomain(domain: LinkDomain) {
   window.sessionStorage.setItem(
     sessionKeys.currentDomain,
