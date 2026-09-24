@@ -1,4 +1,4 @@
-const CACHE = "canis-den-offline-v1"
+const CACHE = "canis-den-offline-v2"
 const OFFLINE = "/offline.html"
 self.addEventListener("install", (event) => {
   event.waitUntil(
