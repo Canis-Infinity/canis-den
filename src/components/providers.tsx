@@ -1,4 +1,5 @@
 "use client"
+import { ServiceWorkerRegistration } from "@/components/service-worker-registration"
 
 import NextTopLoader from "nextjs-toploader"
 
@@ -38,6 +39,7 @@ export function Providers({
         <TooltipProvider delay={150}>{children}</TooltipProvider>
       </ExternalLinkGuard>
       <CookieNotice copy={cookieCopy} />
+      <ServiceWorkerRegistration />
       <Toaster />
     </ThemeProvider>
   )
